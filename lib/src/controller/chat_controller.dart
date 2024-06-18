@@ -153,4 +153,10 @@ class ChatController {
   /// Function for getting ChatUser object from user id
   ChatUser getUserFromId(String userId) =>
       chatUsers.firstWhere((element) => element.id == userId);
+
+  /// clear all list messages
+  void clearMessages() {
+    initialMessageList.clear();
+    messageStreamController.sink.add(initialMessageList);
+  }
 }
