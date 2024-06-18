@@ -142,14 +142,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: theme.themeIconColor,
               ),
             ),
-            IconButton(
-              tooltip: 'Simulate Message receive',
-              onPressed: receiveMessage,
-              icon: Icon(
-                Icons.supervised_user_circle,
-                color: theme.themeIconColor,
-              ),
-            ),
           ],
         ),
         chatBackgroundConfig: ChatBackgroundConfiguration(
