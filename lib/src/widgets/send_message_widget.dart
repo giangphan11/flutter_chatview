@@ -43,6 +43,7 @@ class SendMessageWidget extends StatefulWidget {
     this.onReplyCloseCallback,
     this.messageConfig,
     this.replyMessageBuilder,
+    this.customTextField,
   }) : super(key: key);
 
   /// Provides call back when user tap on send button on text field.
@@ -71,6 +72,8 @@ class SendMessageWidget extends StatefulWidget {
 
   /// Provides a callback for the view when replying to message
   final CustomViewForReplyMessage? replyMessageBuilder;
+
+  final Widget? customTextField;
 
   @override
   State<SendMessageWidget> createState() => SendMessageWidgetState();
@@ -234,7 +237,7 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
                           },
                           valueListenable: _replyMessage,
                         ),
-                        ChatUITextField(
+                        widget.customTextField ?? ChatUITextField(
                           focusNode: _focusNode,
                           textEditingController: _textEditingController,
                           onPressed: _onPressed,

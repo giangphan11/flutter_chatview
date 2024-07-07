@@ -99,7 +99,7 @@ class Data {
     ),
     Message(
       id: '11',
-      message: "https://miro.medium.com/max/1000/0*s7of7kWnf9fDg4XM.jpeg",
+      message: "https://avatars.githubusercontent.com/u/63441861?v=4",
       createdAt: DateTime.now(),
       messageType: MessageType.image,
       sentBy: '1',

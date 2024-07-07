@@ -57,6 +57,7 @@ class ChatView extends StatefulWidget {
     this.emojiPickerSheetConfig,
     this.replyMessageBuilder,
     this.replySuggestionsConfig,
+    this.customTextField,
   })  : chatBackgroundConfig =
             chatBackgroundConfig ?? const ChatBackgroundConfiguration(),
         chatViewStateConfig =
@@ -140,6 +141,8 @@ class ChatView extends StatefulWidget {
 
   /// Provides a callback for the view when replying to message
   final CustomViewForReplyMessage? replyMessageBuilder;
+
+  final Widget? customTextField;
 
   static void closeReplyMessageView(BuildContext context) {
     final state = context.findAncestorStateOfType<_ChatViewState>();
@@ -269,6 +272,7 @@ class _ChatViewState extends State<ChatView>
                           chatController: chatController,
                           sendMessageBuilder: widget.sendMessageBuilder,
                           sendMessageConfig: widget.sendMessageConfig,
+                          customTextField: widget.customTextField,
                           backgroundColor: chatBackgroundConfig.backgroundColor,
                           onSendTap: (message, replyMessage, messageType) {
                             if (context.suggestionsConfig
