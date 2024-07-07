@@ -154,7 +154,7 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView>
     with SingleTickerProviderStateMixin {
-  final GlobalKey<SendMessageWidgetState> _sendMessageKey = GlobalKey();
+  static final GlobalKey<SendMessageWidgetState> _sendMessageKey = GlobalKey();
   ValueNotifier<ReplyMessage> replyMessage =
       ValueNotifier(const ReplyMessage());
 
@@ -265,10 +265,10 @@ class _ChatViewState extends State<ChatView>
                         ),
                       if (featureActiveConfig.enableTextField)
                         SendMessageWidget(
-                          // key: _sendMessageKey,
+                          key: _sendMessageKey,
                           chatController: chatController,
-                          // sendMessageBuilder: widget.sendMessageBuilder,
-                          // sendMessageConfig: widget.sendMessageConfig,
+                          sendMessageBuilder: widget.sendMessageBuilder,
+                          sendMessageConfig: widget.sendMessageConfig,
                           backgroundColor: chatBackgroundConfig.backgroundColor,
                           onSendTap: (message, replyMessage, messageType) {
                             if (context.suggestionsConfig
@@ -278,12 +278,11 @@ class _ChatViewState extends State<ChatView>
                             }
                             _onSendTap(message, replyMessage, messageType);
                           },
-                          // onReplyCallback: (reply) =>
-                          //     replyMessage.value = reply,
-                          // onReplyCloseCallback: () =>
-                          //     replyMessage.value = const ReplyMessage(),
-                          // messageConfig: widget.messageConfig,
-                          // replyMessageBuilder: widget.replyMessageBuilder,
+                          onReplyCallback: (reply) =>
+                              replyMessage.value = reply,
+                          onReplyCloseCallback: () =>
+                              replyMessage.value = const ReplyMessage(),
+                          messageConfig: widget.messageConfig,
                         ),
                     ],
                   ),
