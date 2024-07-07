@@ -100,13 +100,6 @@ class _ChatScreenState extends State<ChatScreen> {
           enableOtherUserProfileAvatar: true,
           enableOtherUserName: false,
         ),
-        customTextField: const TextField(
-          decoration: InputDecoration(
-            hintText: 'Type a message',
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          ),
-        ),
         chatViewState: ChatViewState.hasMessages,
         chatViewStateConfig: ChatViewStateConfiguration(
           loadingWidgetConfig: ChatViewStateWidgetConfiguration(
