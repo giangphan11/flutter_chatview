@@ -49,6 +49,7 @@ class ChatViewAppBar extends StatelessWidget {
     this.networkImageErrorBuilder,
     this.imageType = ImageType.network,
     this.networkImageProgressIndicatorBuilder,
+    this.circleRadius
   }) : super(key: key);
 
   /// Allow user to change colour of appbar.
@@ -106,6 +107,8 @@ class ChatViewAppBar extends StatelessWidget {
   final NetworkImageProgressIndicatorBuilder?
       networkImageProgressIndicatorBuilder;
 
+  final double? circleRadius;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -138,6 +141,7 @@ class ChatViewAppBar extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: ProfileImageWidget(
                         imageUrl: profilePicture,
+                        circleRadius: circleRadius,
                         defaultAvatarImage: defaultAvatarImage,
                         assetImageErrorBuilder: assetImageErrorBuilder,
                         networkImageErrorBuilder: networkImageErrorBuilder,
