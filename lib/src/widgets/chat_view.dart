@@ -263,11 +263,8 @@ class _ChatViewState extends State<ChatView>
                             );
                           },
                         ),
-                      
-                    ],
-                  ),
-                ),
-                if (featureActiveConfig.enableTextField)
+
+                        if (featureActiveConfig.enableTextField)
                         SendMessageWidget(
                           key: _sendMessageKey,
                           chatController: chatController,
@@ -288,6 +285,11 @@ class _ChatViewState extends State<ChatView>
                               replyMessage.value = const ReplyMessage(),
                           messageConfig: widget.messageConfig,
                         )
+                      
+                    ],
+                  ),
+                ),
+                // textfield will put here
               ],
             ),
           );
