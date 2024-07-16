@@ -39,10 +39,13 @@ class ProfileImageWidget extends StatelessWidget {
     this.networkImageErrorBuilder,
     this.imageType = ImageType.network,
     required this.networkImageProgressIndicatorBuilder,
+    this.imageSize
   });
 
   /// Allow user to set radius of circle avatar.
   final double? circleRadius;
+  
+  final double? imageSize;
 
   /// Allow user to pass image url of user's profile picture.
   final String? imageUrl;
@@ -65,30 +68,29 @@ class ProfileImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = (circleRadius ?? 20) * 2;
     return ClipRRect(
       borderRadius: BorderRadius.circular(circleRadius ?? 20),
       child: switch (imageType) {
         ImageType.asset when (imageUrl?.isNotEmpty ?? false) => Image.asset(
             imageUrl!,
-            height: radius,
-            width: radius,
+            height: imageSize ?? 40,
+            width: imageSize ?? 40,
             fit: BoxFit.cover,
             errorBuilder: assetImageErrorBuilder ?? _errorWidget,
           ),
         ImageType.network when (imageUrl?.isNotEmpty ?? false) =>
           CachedNetworkImage(
             imageUrl: imageUrl ?? defaultAvatarImage,
-            height: radius,
-            width: radius,
+            height: imageSize ?? 40,
+            width: imageSize ?? 40,
             fit: BoxFit.cover,
             progressIndicatorBuilder: networkImageProgressIndicatorBuilder,
             errorWidget: networkImageErrorBuilder ?? _networkImageErrorWidget,
           ),
         ImageType.base64 when (imageUrl?.isNotEmpty ?? false) => Image.memory(
             base64Decode(imageUrl!),
-            height: radius,
-            width: radius,
+            height: imageSize ?? 40,
+            width: imageSize ?? 40,
             fit: BoxFit.cover,
             errorBuilder: assetImageErrorBuilder ?? _errorWidget,
           ),
