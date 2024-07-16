@@ -2,7 +2,7 @@ import 'package:chatview/chatview.dart';
 
 class Data {
   static const profileImage =
-      "https://raw.githubusercontent.com/SimformSolutionsPvtLtd/flutter_showcaseview/master/example/assets/simform.png";
+      "https://avatars.githubusercontent.com/u/63441861?v=4";
   static final messageList = [
     Message(
       id: '1',
