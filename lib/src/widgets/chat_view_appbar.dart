@@ -50,7 +50,9 @@ class ChatViewAppBar extends StatelessWidget {
     this.imageType = ImageType.network,
     this.networkImageProgressIndicatorBuilder,
     this.circleRadius,
-    this.imageSize
+    this.imageSize,
+    this.isUserVerified = false,
+    this.verifiedIconColor,
   }) : super(key: key);
 
   /// Allow user to change colour of appbar.
@@ -112,6 +114,9 @@ class ChatViewAppBar extends StatelessWidget {
 
   final double? imageSize;
 
+  final bool isUserVerified;
+  final Color? verifiedIconColor;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -157,7 +162,10 @@ class ChatViewAppBar extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
                         chatTitle,
                         style: chatTitleTextStyle ??
                             const TextStyle(
@@ -165,6 +173,12 @@ class ChatViewAppBar extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               letterSpacing: 0.25,
                             ),
+                      ),
+                      if(isUserVerified)
+                      const SizedBox(width: 4),
+                      if(isUserVerified)
+                      Icon(Icons.verified, color: verifiedIconColor ?? Colors.blue, size: 16)
+                        ],
                       ),
                       if (userStatus != null)
                         Text(

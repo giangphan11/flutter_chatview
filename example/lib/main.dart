@@ -117,6 +117,8 @@ class _ChatScreenState extends State<ChatScreen> {
           profilePicture: Data.profileImage,
           backArrowColor: theme.backArrowColor,
           chatTitle: "Chat view",
+          isUserVerified: true,
+          verifiedIconColor: Colors.red,
           chatTitleTextStyle: TextStyle(
             color: theme.appBarTitleTextStyle,
             fontWeight: FontWeight.bold,
