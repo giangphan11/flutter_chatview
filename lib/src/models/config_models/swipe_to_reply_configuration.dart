@@ -21,43 +21,27 @@
  */
 import 'package:flutter/material.dart';
 
-import '../values/typedefs.dart';
-import 'message.dart';
+class SwipeToReplyConfiguration {
+  /// Used to give color of reply icon while swipe to reply.
+  final Color? replyIconColor;
 
-class ReplyPopupConfiguration {
-  /// Used for giving background color to reply snack-bar.
-  final Color? backgroundColor;
+  /// Used to give color of circular progress around reply icon while swipe to reply.
+  final Color? replyIconProgressRingColor;
 
-  /// Provides builder for creating reply pop-up widget.
-  final Widget Function(Message message, bool sentByCurrentUser)?
-      replyPopupBuilder;
+  /// Used to give color of reply icon background when swipe to reply reach swipe limit.
+  final Color? replyIconBackgroundColor;
 
-  /// Provides callback on unSend button.
-  final MessageCallBack? onUnsendTap;
+  /// Provides callback when user swipe chat bubble from left side.
+  final void Function(String message, String sentBy)? onLeftSwipe;
 
-  /// Provides callback on onReply button.
-  final MessageCallBack? onReplyTap;
+  /// Provides callback when user swipe chat bubble from right side.
+  final void Function(String message, String sentBy)? onRightSwipe;
 
-  /// Provides callback on onReport button.
-  final MessageCallBack? onReportTap;
-
-  /// Provides callback on onMore button.
-  final MoreTapCallBack? onMoreTap;
-
-  /// Used to give text style of button text.
-  final TextStyle? buttonTextStyle;
-
-  /// Used to give color to top side border of reply snack bar.
-  final Color? topBorderColor;
-
-  const ReplyPopupConfiguration({
-    this.buttonTextStyle,
-    this.topBorderColor,
-    this.onUnsendTap,
-    this.onReplyTap,
-    this.onReportTap,
-    this.onMoreTap,
-    this.backgroundColor,
-    this.replyPopupBuilder,
+  const SwipeToReplyConfiguration({
+    this.replyIconColor,
+    this.replyIconProgressRingColor,
+    this.replyIconBackgroundColor,
+    this.onRightSwipe,
+    this.onLeftSwipe,
   });
 }

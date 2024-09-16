@@ -99,6 +99,19 @@ class _ChatScreenState extends State<ChatScreen> {
           receiptsBuilderVisibility: true,
           enableOtherUserProfileAvatar: true,
           enableOtherUserName: false,
+          enableScrollToBottomButton: true,
+        ),
+        scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
+          backgroundColor: theme.textFieldBackgroundColor,
+          border: Border.all(
+            color: isDarkTheme ? Colors.transparent : Colors.grey,
+          ),
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: theme.themeIconColor,
+            weight: 10,
+            size: 30,
+          ),
         ),
         chatViewState: ChatViewState.hasMessages,
         chatViewStateConfig: ChatViewStateConfiguration(

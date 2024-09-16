@@ -21,7 +21,7 @@
  */
 import 'package:flutter/material.dart';
 
-import '../values/typedefs.dart';
+import '../../values/typedefs.dart';
 
 class ReactionPopupConfiguration {
   /// Used for background color in reaction pop-up.
@@ -54,8 +54,12 @@ class ReactionPopupConfiguration {
   /// Provides callback when user react on message.
   final ReactionCallback? userReactionCallback;
 
+  /// Provides feasibility to completely override userReactionCallback defaults to false.
+  final bool? overrideUserReactionCallback;
+
   const ReactionPopupConfiguration({
     this.userReactionCallback,
+    this.overrideUserReactionCallback = false,
     this.showGlassMorphismEffect = false,
     this.backgroundColor,
     this.shadow,

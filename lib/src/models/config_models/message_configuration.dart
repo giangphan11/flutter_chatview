@@ -19,25 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import 'package:chatview/src/models/models.dart';
+import 'package:chatview/src/models/config_models/voice_message_configuration.dart';
 import 'package:flutter/material.dart';
 
-class SwipeToReplyConfiguration {
-  /// Used to give color of reply icon while swipe to reply.
-  final Color? replyIconColor;
+import '../../values/typedefs.dart';
 
-  /// Used to give animation duration while swipe to reply.
-  final Duration? animationDuration;
+class MessageConfiguration {
+  /// Provides configuration of image message appearance.
+  final ImageMessageConfiguration? imageMessageConfig;
 
-  /// Provides callback when user swipe chat bubble from left side.
-  final void Function(String message, String sentBy)? onLeftSwipe;
+  /// Provides configuration of image message appearance.
+  final MessageReactionConfiguration? messageReactionConfig;
 
-  /// Provides callback when user swipe chat bubble from right side.
-  final void Function(String message, String sentBy)? onRightSwipe;
+  /// Provides configuration of emoji messages appearance.
+  final EmojiMessageConfiguration? emojiMessageConfig;
 
-  const SwipeToReplyConfiguration({
-    this.replyIconColor,
-    this.animationDuration,
-    this.onRightSwipe,
-    this.onLeftSwipe,
+  /// Provides builder to create view for custom messages.
+  final Widget Function(Message)? customMessageBuilder;
+
+  /// Configurations for voice message bubble
+  final VoiceMessageConfiguration? voiceMessageConfig;
+
+  /// To customize reply view for custom message type
+  final CustomMessageReplyViewBuilder? customMessageReplyViewBuilder;
+
+  const MessageConfiguration({
+    this.imageMessageConfig,
+    this.messageReactionConfig,
+    this.emojiMessageConfig,
+    this.customMessageBuilder,
+    this.voiceMessageConfig,
+    this.customMessageReplyViewBuilder,
   });
 }

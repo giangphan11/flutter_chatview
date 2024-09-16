@@ -72,7 +72,8 @@ class ImageMessageView extends StatelessWidget {
       mainAxisAlignment:
           isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
-        if (isMessageBySender) iconButton,
+        if (isMessageBySender && !(imageMessageConfig?.hideShareIcon ?? false))
+          iconButton,
         Stack(
           children: [
             GestureDetector(
@@ -141,7 +142,8 @@ class ImageMessageView extends StatelessWidget {
               ),
           ],
         ),
-        if (!isMessageBySender) iconButton,
+        if (!isMessageBySender && !(imageMessageConfig?.hideShareIcon ?? false))
+          iconButton,
       ],
     );
   }
