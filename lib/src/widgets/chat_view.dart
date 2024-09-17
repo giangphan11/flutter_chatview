@@ -163,7 +163,7 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView>
     with SingleTickerProviderStateMixin {
-  final GlobalKey<SendMessageWidgetState> _sendMessageKey = GlobalKey();
+  static final GlobalKey<SendMessageWidgetState> _sendMessageKey = GlobalKey();
   ValueNotifier<ReplyMessage> replyMessage =
       ValueNotifier(const ReplyMessage());
 
@@ -291,12 +291,7 @@ class _ChatViewState extends State<ChatView>
                                   _onSendTap(
                                       message, replyMessage, messageType);
                                 },
-                                onReplyCallback: (reply) =>
-                                    replyMessage.value = reply,
-                                onReplyCloseCallback: () =>
-                                    replyMessage.value = const ReplyMessage(),
                                 messageConfig: widget.messageConfig,
-                                replyMessageBuilder: widget.replyMessageBuilder,
                               ),
                           ],
                         ),

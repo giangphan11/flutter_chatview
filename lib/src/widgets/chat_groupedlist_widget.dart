@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 
 import 'chat_bubble_widget.dart';
 import 'chat_group_header.dart';
+import 'chat_view_inherited_widget.dart';
 
 class ChatGroupedListWidget extends StatefulWidget {
   const ChatGroupedListWidget({
@@ -105,7 +106,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
       if (!mounted) return;
       setState(() {
         chatTextFieldHeight =
-            chatViewIW?.chatTextFieldViewKey.currentContext?.size?.height ?? 10;
+            ChatViewInheritedWidget.chatTextFieldViewKey.currentContext?.size?.height ?? 10;
       });
     });
   }

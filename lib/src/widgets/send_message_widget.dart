@@ -31,6 +31,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../utils/constants/constants.dart';
+import 'chat_view_inherited_widget.dart';
 
 class SendMessageWidget extends StatefulWidget {
   const SendMessageWidget({
@@ -143,7 +144,7 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
                             ),
                           ),
                         Padding(
-                          key: chatViewIW?.chatTextFieldViewKey,
+                          key: ChatViewInheritedWidget.chatTextFieldViewKey,
                           padding: EdgeInsets.fromLTRB(
                             bottomPadding4,
                             bottomPadding4,
