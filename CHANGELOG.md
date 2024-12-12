@@ -1,6 +1,28 @@
+## [2.3.1]
+
+* **Fix**: [282](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/282) Upgrade
+  version of audio wave forms 1.2.0
+* **Fix**: [276](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/276) link preview
+  custom error message
+
+## [2.3.0]
+
+* **Breaking**: [257](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/257) update
+  onTap callback in ImageMessageConfiguration to use message object instead of image URL
+* **Fix**: [254](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/254) Outgoing
+  Message Alignment
+* **Fix**: [266](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/266) Update
+  dependencies
+* **Fix**: [264](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/264) missing
+  voice_message_configuration.dart export in models.dart
+* **Fix**: [261](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/261)
+  userReactionCallback not working
+* **Fix**: [240](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/240)
+  ScrollController Exception in ChatController.scrollToLastMessage
+
 ## [2.2.0]
 
-* **feat**: [246](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/246) add
+* **Feat**: [246](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/246) add
   functionality to scroll to bottom button
 * **Fix**: [247](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/247) fix mobile
   browser grey screen issue

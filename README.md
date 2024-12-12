@@ -243,7 +243,7 @@ void onSendTap(String message, ReplyMessage replyMessage, MessageType messageTyp
     id: '3',
     message: "How are you",
     createdAt: DateTime.now(),
-    senBy: currentUser.id,
+    sentBy: currentUser.id,
     replyMessage: replyMessage,
     messageType: messageType,
   );
@@ -1006,6 +1006,20 @@ ChatView(
   ...
     scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
 
+),
+  ...
+),
+```
+
+
+36. Use `errorBody` to displays an error message when the link cannot be parsed for preview.
+
+
+```dart
+ChatView(
+  ...
+    linkPreviewConfig: LinkPreviewConfiguration(
+      errorBody: 'Error encountered while parsing the link for preview'
 ),
   ...
 ),
