@@ -106,7 +106,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
       if (!mounted) return;
       setState(() {
         chatTextFieldHeight =
-            ChatViewInheritedWidget.chatTextFieldViewKey.currentContext?.size?.height ?? 10;
+            chatViewIW?.chatTextFieldViewKey.currentContext?.size?.height ?? 10;
       });
     });
   }
