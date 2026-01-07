@@ -21,9 +21,7 @@
  */
 import 'package:flutter/material.dart';
 
-import 'package:chatview/src/utils/package_strings.dart';
-
-import '../values/typedefs.dart';
+import '../utils/package_strings.dart';
 
 class ReplyPopupWidget extends StatelessWidget {
   const ReplyPopupWidget({
@@ -41,16 +39,16 @@ class ReplyPopupWidget extends StatelessWidget {
   final bool sentByCurrentUser;
 
   /// Provides call back when user tap on unsend button.
-  final VoidCallBack onUnsendTap;
+  final VoidCallback onUnsendTap;
 
   /// Provides call back when user tap on reply button.
-  final VoidCallBack onReplyTap;
+  final VoidCallback onReplyTap;
 
   /// Provides call back when user tap on report button.
-  final VoidCallBack onReportTap;
+  final VoidCallback onReportTap;
 
   /// Provides call back when user tap on more button.
-  final VoidCallBack onMoreTap;
+  final VoidCallback onMoreTap;
 
   /// Allow user to set text style of button are showed in reply snack bar.
   final TextStyle? buttonTextStyle;
@@ -76,7 +74,7 @@ class ReplyPopupWidget extends StatelessWidget {
             child: InkWell(
               onTap: onReplyTap,
               child: Text(
-                PackageStrings.reply,
+                PackageStrings.currentLocale.reply,
                 textAlign: TextAlign.center,
                 style: textStyle,
               ),
@@ -87,7 +85,7 @@ class ReplyPopupWidget extends StatelessWidget {
               child: InkWell(
                 onTap: onUnsendTap,
                 child: Text(
-                  PackageStrings.unsend,
+                  PackageStrings.currentLocale.unsend,
                   textAlign: TextAlign.center,
                   style: textStyle,
                 ),
@@ -98,7 +96,7 @@ class ReplyPopupWidget extends StatelessWidget {
               child: InkWell(
                 onTap: onReportTap,
                 child: Text(
-                  PackageStrings.report,
+                  PackageStrings.currentLocale.report,
                   textAlign: TextAlign.center,
                   style: textStyle,
                 ),
@@ -108,7 +106,7 @@ class ReplyPopupWidget extends StatelessWidget {
             child: InkWell(
               onTap: onMoreTap,
               child: Text(
-                PackageStrings.more,
+                PackageStrings.currentLocale.more,
                 textAlign: TextAlign.center,
                 style: textStyle,
               ),

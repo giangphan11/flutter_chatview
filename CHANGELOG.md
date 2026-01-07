@@ -1,148 +1,253 @@
+## [Unreleased]
+
+* **Breaking**: [398](https://github.com/SimformSolutionsPvtLtd/chatview/pull/398)
+  Implement logic to manage voice message playback during recording and manage currently playing voice messages
+
+## [3.0.0]
+
+* **Fix**: [415](https://github.com/SimformSolutionsPvtLtd/chatview/pull/415)
+  Adjust emoji display logic to handle multiple emojis display width and added
+  `maxOutSideBubbleEmojis` parameter in `EmojiMessageConfig`.
+* **Fix**: [358](https://github.com/SimformSolutionsPvtLtd/chatview/issues/358) Fix issue of Image
+  selected from the locally is unable to display in message (windows).
+* **Feat**: [414](https://github.com/SimformSolutionsPvtLtd/chatview/pull/414)
+  Enhance link preview to support multiple URLs extraction and clickable links.
+* **Feat**: [374](https://github.com/SimformSolutionsPvtLtd/chatview/issues/374)
+  Add support for displaying and selecting text and links in a single message view.
+* **Breaking**: [411](https://github.com/SimformSolutionsPvtLtd/chatview/pull/411) Update the
+  example iOS deployment target to 13, as the example depends on `audiowaveform`, which requires iOS
+  13 or later.
+* **Feat**: [401](https://github.com/SimformSolutionsPvtLtd/chatview/pull/401)
+  Added text selection and copy functionality to chat bubbles. Introduced the `onTextSelection`
+  parameter in `FeatureActiveConfig` (default: false). When enabled, users can select and copy text
+  with a long press.
+* **Breaking**: [318](https://github.com/SimformSolutionsPvtLtd/chatview/issues/318)
+  Provide support for action item widgets on the chat text field with position options
+  `leadingActions` and `trailingActions` in `TextFieldConfiguration`. Also, provide a way to add
+  plus/attach button to open the overlay for action items.
+* **Breaking**: [340](https://github.com/SimformSolutionsPvtLtd/chatview/pull/340) Added
+  `hintMaxLines` and `hideLeadingActionsOnType` params to `TextFieldConfiguration`.
+* **Breaking**: [330](https://github.com/SimformSolutionsPvtLtd/chatview/issues/330)
+  Optimized memory usage in chat message handling for smoother performance.
+* **Feat**: [386](https://github.com/SimformSolutionsPvtLtd/chatview/pull/386) Introduced
+  `ChatList` to provide a support for listing chats with options like search, pagination, online
+  status, unread message count, typing indicator, long press menu and more.
+* **Feat**: [356](https://github.com/SimformSolutionsPvtLtd/chatview/pull/356) Add
+  `loadOldReplyMessage` property to `RepliedMessageConfiguration` callback to load the original
+  message being replied to when it is not present in the current message list.
+* **Feat**: [356](https://github.com/SimformSolutionsPvtLtd/chatview/pull/356) Add `alignment`
+  property to `RepliedMsgAutoScrollConfig` to set the alignment of the replied message when auto
+  scrolled to it.
+* **Feat**: [350](https://github.com/SimformSolutionsPvtLtd/chatview/pull/350) ChatView loading
+  states now displays platform-wise progress indicator.
+* **Fix**: [380](https://github.com/SimformSolutionsPvtLtd/chatview/pull/380) Fix issue of
+  `ChatViewStateWidgetConfiguration` accepting null values and causing exceptions.
+* **Breaking**: [356](https://github.com/SimformSolutionsPvtLtd/chatview/pull/356) Add two way
+  pagination support in ChatView & `loadMoreData` callback now provides `direction` and `message`
+  parameters to indicate the direction of pagination and the message from which to load more
+  messages.
+* **Feat**: [301](https://github.com/SimformSolutionsPvtLtd/chatview/issues/301) Add
+  `CameraActionButton`, `GalleryActionButton` and `OverlayActionButton` ready to use widgets for
+  action items in chat text field.
+* **Feat**: [222](https://github.com/SimformSolutionsPvtLtd/chatview/issues/222) Add
+  `EmojiPickerActionButton` ready to use widgets for action items in chat text field.
+* **Breaking**: [340](https://github.com/SimformSolutionsPvtLtd/chatview/issues/340) Removed
+  `enableGalleryImagePicker` and `enableCameraImagePicker` from `SendMessageConfiguration`.
+* **Fix**: [340](https://github.com/SimformSolutionsPvtLtd/chatview/pull/340) Fix issue of
+  selected image not being displayed above text field in web platform.
+* **Feat**: [18](https://github.com/SimformSolutionsPvtLtd/chatview_utils/pull/18) Add
+  `updateMessage` method in `ChatController` to update an existing message in the chat.
+* **Breaking**: [19](https://github.com/SimformSolutionsPvtLtd/chatview_utils/pull/19) Removed `key`
+  param from `Message` model to avoid rebuild when same object with same values provided.
+* **Fix**: [382](https://github.com/SimformSolutionsPvtLtd/chatview/issues/382) Fix
+  `sendMessageBuilder` overlaps last message.
+* **Feat**: [387](https://github.com/SimformSolutionsPvtLtd/chatview/pull/387) Added support for
+  `Asset` and `Memory` type images in `backgroundImage` in `ChatBackgroundConfiguration` and
+  `customIndicator` in `TypeIndicatorConfiguration`.
+* **Feat**: [390](https://github.com/SimformSolutionsPvtLtd/chatview/pull/390) Added support for
+  customizing send message button style and introduced `outgoingPlayerWaveStyle`,
+  `inComingPlayerWaveStyle` in `VoiceMessageConfiguration` to customize the audio wave style for
+  outgoing and incoming messages separately.
+* **Breaking**: [390](https://github.com/SimformSolutionsPvtLtd/chatview/pull/390) Reacted emojis
+  are now shown in custom messages as well.
+* **Breaking**: [390](https://github.com/SimformSolutionsPvtLtd/chatview/pull/390) `playIcon` and
+  `pauseIcon` Now accepts a callback that provides different icons based on whether the message is
+  by the sender or not. accept `Widget`.
+* **Feat**: [390](https://github.com/SimformSolutionsPvtLtd/chatview/pull/406) Updated
+  audio_waveforms version to `2.0.0`
+* **Breaking**: [390](https://github.com/SimformSolutionsPvtLtd/chatview/pull/406) Moved recording
+  audio settings from `VoiceRecordingConfiguration` to `RecorderSettings`. Check out the migration
+  guide [here](https://simform-flutter-packages.web.app/chatView/migration-guide).
+
+## [2.5.0]
+
+* **Feat**: [275](https://github.com/SimformSolutionsPvtLtd/chatview/issues/275)
+  Sending image with text message
+* **Fix**: [294](https://github.com/SimformSolutionsPvtLtd/chatview/issues/294)
+  Ensure onMessageRead is called correctly
+* **Fix**: [332](https://github.com/SimformSolutionsPvtLtd/chatview/issues/332)
+  Hide keyboard when tapping outside of the text field and add height field for the text field
+* **Fix**: [266](https://github.com/SimformSolutionsPvtLtd/chatview/issues/266)
+  Fix the keyboard overlapping the text field
+* **Feat**: [296](https://github.com/SimformSolutionsPvtLtd/chatview/issues/296)
+  Added support of internationalization for strings that are used in chat view
+* **Fix**: [303](https://github.com/SimformSolutionsPvtLtd/chatview/issues/303)
+  Hit ENTER button on PC keyboard, then send out message immediately
+* **Fix**: [289](https://github.com/SimformSolutionsPvtLtd/chatview/issues/289)
+  ScrollController is disposed when parent widget state changes
+
+## [2.4.1]
+
+* **Important**: Updated minimum SDK version to `3.4.0`
+* **Refactor**: Use `chatview_utils` for data models & utils
+* **Fix**: [317](https://github.com/SimformSolutionsPvtLtd/chatview/issues/317) Link Preview
+  is attempted even after adding disableLinkPreview: true
+
 ## [2.4.0]
 
-* **Feat**: [251](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/251) Add
+* **Feat**: [251](https://github.com/SimformSolutionsPvtLtd/chatview/issues/251) Add
   support to provide a type of suggestions item(Scrollable or Multi Line).
-* **Fix**: [281](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/281) Fix date
+* **Fix**: [281](https://github.com/SimformSolutionsPvtLtd/chatview/issues/281) Fix date
   and time divider in between messages
-* **Fix**: [282](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/282) Upgrade
+* **Fix**: [282](https://github.com/SimformSolutionsPvtLtd/chatview/pull/282) Upgrade
   version of audio wave forms 1.2.0
-* **Fix**: [276](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/276) link preview
+* **Fix**: [276](https://github.com/SimformSolutionsPvtLtd/chatview/issues/276) link preview
   custom error message
-* **Feat**: [280](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/280) ability to
+* **Feat**: [280](https://github.com/SimformSolutionsPvtLtd/chatview/issues/280) ability to
   disable link preview
-* **Fix**: [253](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/253)
+* **Fix**: [253](https://github.com/SimformSolutionsPvtLtd/chatview/issues/253)
   chatTextFieldViewKey key gets re-initialized every widget render
 
 ## [2.3.0]
 
-* **Breaking**: [257](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/257) update
+* **Breaking**: [257](https://github.com/SimformSolutionsPvtLtd/chatview/issues/257) update
   onTap callback in ImageMessageConfiguration to use message object instead of image URL
-* **Fix**: [254](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/254) Outgoing
+* **Fix**: [254](https://github.com/SimformSolutionsPvtLtd/chatview/issues/254) Outgoing
   Message Alignment
-* **Fix**: [266](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/266) Update
+* **Fix**: [266](https://github.com/SimformSolutionsPvtLtd/chatview/pull/266) Update
   dependencies
-* **Fix**: [264](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/264) missing
+* **Fix**: [264](https://github.com/SimformSolutionsPvtLtd/chatview/issues/264) missing
   voice_message_configuration.dart export in models.dart
-* **Fix**: [261](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/261)
+* **Fix**: [261](https://github.com/SimformSolutionsPvtLtd/chatview/issues/261)
   userReactionCallback not working
-* **Fix**: [240](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/240)
+* **Fix**: [240](https://github.com/SimformSolutionsPvtLtd/chatview/issues/240)
   ScrollController Exception in ChatController.scrollToLastMessage
 
 ## [2.2.0]
 
-* **Feat**: [246](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/246) add
+* **Feat**: [246](https://github.com/SimformSolutionsPvtLtd/chatview/pull/246) add
   functionality to scroll to bottom button
-* **Fix**: [247](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/247) fix mobile
+* **Fix**: [247](https://github.com/SimformSolutionsPvtLtd/chatview/issues/247) fix mobile
   browser grey screen issue
 
 ## [2.1.1]
 
-* **Fix**: [238](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/238) Clear
+* **Fix**: [238](https://github.com/SimformSolutionsPvtLtd/chatview/issues/238) Clear
   initial message list - Exception Widget's Ancestor is unsafe
 
 ## [2.1.0]
 
-* **Fix**: [226](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/226) Fixed
+* **Fix**: [226](https://github.com/SimformSolutionsPvtLtd/chatview/issues/226) Fixed
   the icons for starting and stopping recording were reversed
-* **Fix**: [217](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/217) Fixed y
+* **Fix**: [217](https://github.com/SimformSolutionsPvtLtd/chatview/pull/217) Fixed y
   position of reaction popup
-* **Fix**: [233](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/233) swipe to reply
+* **Fix**: [233](https://github.com/SimformSolutionsPvtLtd/chatview/pull/233) swipe to reply
   gesture interaction update
-* **Feat** [223](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/223) Ability to
+* **Feat** [223](https://github.com/SimformSolutionsPvtLtd/chatview/issues/223) Ability to
   hide share icon in image view
-* **Fix**: [232](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/232) The audio
+* **Fix**: [232](https://github.com/SimformSolutionsPvtLtd/chatview/issues/232) The audio
   record cancelIcon is overflowed pixel
-* **Feat** [228](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/228) Ability to
+* **Feat** [228](https://github.com/SimformSolutionsPvtLtd/chatview/issues/228) Ability to
   completely override userReactionCallback
-* **Fix**: [218](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/218) fix: handle
+* **Fix**: [218](https://github.com/SimformSolutionsPvtLtd/chatview/pull/218) fix: handle
   snackBar queue while reacting on message
 
 ## [2.0.0]
 
-* **Breaking**: [203](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/203) Dart
+* **Breaking**: [203](https://github.com/SimformSolutionsPvtLtd/chatview/pull/203) Dart
   Minimum Version 3.2.0.
-* **Breaking**: [202](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/202)
+* **Breaking**: [202](https://github.com/SimformSolutionsPvtLtd/chatview/pull/202)
   Message copyWith id value fix.
-* **Breaking**: [173](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/173) Added
+* **Breaking**: [173](https://github.com/SimformSolutionsPvtLtd/chatview/pull/173) Added
   callback to sort message in chat.
-* **Breaking**: [178](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/178) Fixed
+* **Breaking**: [178](https://github.com/SimformSolutionsPvtLtd/chatview/pull/178) Fixed
   json serializable of models and added copyWith method (Message, Reaction and Reply Message).
-* **Breaking**: [181](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/181) Removed
+* **Breaking**: [181](https://github.com/SimformSolutionsPvtLtd/chatview/pull/181) Removed
   deprecated field `showTypingIndicator` from ChatView.
-* **Breaking**: [188](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/188) update
+* **Breaking**: [188](https://github.com/SimformSolutionsPvtLtd/chatview/pull/188) update
   sendBy parameter name of Message class to sentBy
-* **Breaking**: [190](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/190) Move
+* **Breaking**: [190](https://github.com/SimformSolutionsPvtLtd/chatview/pull/190) Move
   currentUser into ChatController from ChatView widget and rename chatUsers to otherUsers
-* **Feat**: [184](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/184) Added reply
+* **Feat**: [184](https://github.com/SimformSolutionsPvtLtd/chatview/pull/184) Added reply
   suggestions functionality
-* **Feat**: [157](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/157) Added onTap
+* **Feat**: [157](https://github.com/SimformSolutionsPvtLtd/chatview/pull/157) Added onTap
   of reacted user from reacted user list.
-* **Feat**: [156](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/156) Added
+* **Feat**: [156](https://github.com/SimformSolutionsPvtLtd/chatview/pull/156) Added
   default avatar, error builder for asset, network and base64 profile image and
   cached_network_image for network images.
-* **Feat**: [121](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/121) Added support
+* **Feat**: [121](https://github.com/SimformSolutionsPvtLtd/chatview/pull/121) Added support
   for configuring the audio recording quality.
-* **Feat**: [93](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/93) Added support
+* **Feat**: [93](https://github.com/SimformSolutionsPvtLtd/chatview/issues/93) Added support
   that provide date pattern to change chat separation.
-* **Fix**: [200](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/200) ChatView
+* **Fix**: [200](https://github.com/SimformSolutionsPvtLtd/chatview/pull/200) ChatView
   iOS Padding Issue Fix
-* **Fix**: [139](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/139) Added
+* **Fix**: [139](https://github.com/SimformSolutionsPvtLtd/chatview/issues/139) Added
   support to customize view for the reply of any message.
-* **Fix**: [174](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/174) Fix wrong
+* **Fix**: [174](https://github.com/SimformSolutionsPvtLtd/chatview/issues/174) Fix wrong
   username shown while replying to any messages.
-* **Fix**: [134](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/134) Added a
+* **Fix**: [134](https://github.com/SimformSolutionsPvtLtd/chatview/issues/134) Added a
   reply message view for custom message type.
-* **Fix**: [137](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/137) Added
+* **Fix**: [137](https://github.com/SimformSolutionsPvtLtd/chatview/issues/137) Added
   support for cancel voice recording and field to provide cancel record icon.
-* **Fix**: [142](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/142) Added field
+* **Fix**: [142](https://github.com/SimformSolutionsPvtLtd/chatview/issues/142) Added field
   to provide base64 string data for profile picture.
-* **Fix**: [161](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/161) Added field
+* **Fix**: [161](https://github.com/SimformSolutionsPvtLtd/chatview/pull/161) Added field
   to set top padding of chat text field.
-* **Fix**: [165](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/165) Fix issue of
+* **Fix**: [165](https://github.com/SimformSolutionsPvtLtd/chatview/issues/165) Fix issue of
   user reaction callback provides incorrect message object when user react on any message with
   double or from reaction sheet.
-* **Fix**: [164](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/164) Add flag to
+* **Fix**: [164](https://github.com/SimformSolutionsPvtLtd/chatview/issues/164) Add flag to
   enable/disable chat text field.
-* **Fix**: [131](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/131) Fix
+* **Fix**: [131](https://github.com/SimformSolutionsPvtLtd/chatview/issues/131) Fix
   unsupported operation while running on the web.
-* **Fix**: [160](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/160) Added
+* **Fix**: [160](https://github.com/SimformSolutionsPvtLtd/chatview/pull/160) Added
   configuration for emoji picker sheet.
-* **Fix**: [130](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/130) Added report
+* **Fix**: [130](https://github.com/SimformSolutionsPvtLtd/chatview/issues/130) Added report
   button for receiver message and update onMoreTap, onReportTap callback.
-* **Fix**: [126](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/126) Added flag
+* **Fix**: [126](https://github.com/SimformSolutionsPvtLtd/chatview/issues/126) Added flag
   to hide user name in chat.
-* **Fix**: [182](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/182) Fix
+* **Fix**: [182](https://github.com/SimformSolutionsPvtLtd/chatview/issues/182) Fix
   send message not working when user start texting after newLine.
-* **Fix**: [191](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/191) Fix
+* **Fix**: [191](https://github.com/SimformSolutionsPvtLtd/chatview/pull/191) Fix
   error when using `BuildContext` or `State` extensions when not mounted.
-* **Fix**: [192](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/192) Fix
+* **Fix**: [192](https://github.com/SimformSolutionsPvtLtd/chatview/pull/192) Fix
   send to closed socket or animate on `ScrollController` without clients.
-* **Fix**: [194](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/194) Dispose
+* **Fix**: [194](https://github.com/SimformSolutionsPvtLtd/chatview/pull/194) Dispose
   all `ValueNotifier`s and `ScrollController`s in `ChatController`.
-* **chore**: [168](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/168) Update
+* **chore**: [168](https://github.com/SimformSolutionsPvtLtd/chatview/pull/168) Update
   intl to version 0.19.0.
 
 ## [1.3.1]
 
-* **Feat**: [105](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/105) Allow user
+* **Feat**: [105](https://github.com/SimformSolutionsPvtLtd/chatview/pull/105) Allow user
   to get callback when image is picked so user can perform operation like crop. Allow user to pass
   configuration like height, width, image quality and preferredCameraDevice.
-* **Fix**: [95](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/95) Fix issue of
+* **Fix**: [95](https://github.com/SimformSolutionsPvtLtd/chatview/issues/95) Fix issue of
   chat is added to bottom while `loadMoreData` callback.
-* **Fix**: [109](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/109) Added
+* **Fix**: [109](https://github.com/SimformSolutionsPvtLtd/chatview/issues/109) Added
   support for the hiding/Un-hiding gallery and camera buttons
 
 ## [1.3.0]
 
-* **Feat**: [71](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/71) Added Callback
+* **Feat**: [71](https://github.com/SimformSolutionsPvtLtd/chatview/pull/71) Added Callback
   when a user starts/stops composing typing a message.
-* **Fix**: [78](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/78) Fix issue of
+* **Fix**: [78](https://github.com/SimformSolutionsPvtLtd/chatview/pull/78) Fix issue of
   unmodifiable list.
-* **Feat**: [76](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/76) Message
+* **Feat**: [76](https://github.com/SimformSolutionsPvtLtd/chatview/pull/76) Message
   Receipts.
-* **Fix**: [81](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/81) Fix issue of
+* **Fix**: [81](https://github.com/SimformSolutionsPvtLtd/chatview/pull/81) Fix issue of
   TypingIndicator Rebuilding ChatView.
-* **Fix**: [94](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/pull/94) Fixed deprecated
+* **Fix**: [94](https://github.com/SimformSolutionsPvtLtd/chatview/pull/94) Fixed deprecated
   `showRecentsTab` property with new `recentTabBehavior`.
 * Support for latest flutter version `3.10.5`.
 * Update dependencies `http` to version `1.1.0` and `image_picker` to version
@@ -150,33 +255,33 @@
 
 ## [1.2.1]
 
-* **Fix**: [60](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/60) Fix image from
+* **Fix**: [60](https://github.com/SimformSolutionsPvtLtd/chatview/issues/60) Fix image from
   file is not loaded.
-* **Fix**: [61](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/61) Fix issue of
+* **Fix**: [61](https://github.com/SimformSolutionsPvtLtd/chatview/issues/61) Fix issue of
   audio message is not working.
-* **Feat**: [65](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/65) Add callback
+* **Feat**: [65](https://github.com/SimformSolutionsPvtLtd/chatview/issues/65) Add callback
   when user react on message.
 
 ## [1.2.0+1]
 
-* **Feat**: [42](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/42) Ability to
+* **Feat**: [42](https://github.com/SimformSolutionsPvtLtd/chatview/issues/42) Ability to
   get callback on tap of profile circle avatar.
 * **Breaking**: Add `messageType` in `onSendTap` callback for encountering messages.
 * **Breaking**: Remove `onRecordingComplete` and you can get Recorded audio in `onSendTap` callback
   with `messageType`.
 * **Breaking**: Remove `onImageSelected` from `ImagePickerIconsConfiguration` and can get selected
   image in `onSendTap` callback with `messageType`.
-* **Feat**: [49](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/49)
+* **Feat**: [49](https://github.com/SimformSolutionsPvtLtd/chatview/issues/49)
   Add `onUrlDetect`
   callback for opening urls.
-* **Feat**: [51](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/51) Ability to
+* **Feat**: [51](https://github.com/SimformSolutionsPvtLtd/chatview/issues/51) Ability to
   get callback on long press of profile circle avatar.
 
 ## [1.1.0]
 
-* **Feat**: [37](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/37) Ability to
+* **Feat**: [37](https://github.com/SimformSolutionsPvtLtd/chatview/issues/37) Ability to
   enable or disable specific features.
-* **Feat**: [34](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/34) Ability to
+* **Feat**: [34](https://github.com/SimformSolutionsPvtLtd/chatview/issues/34) Ability to
   add voice message.
 * **Breaking**: Remove `onEmojiTap` from `ReactionPopupConfiguration`, it can be handled internally.
 * **Breaking**: Remove `horizontalDragToShowMessageTime` from `ChatBackgroundConfiguration` and
@@ -188,9 +293,9 @@
 
 ## [1.0.1]
 
-* **Fix**: [32](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/32) Fix issue of
+* **Fix**: [32](https://github.com/SimformSolutionsPvtLtd/chatview/issues/32) Fix issue of
   while replying to image it highlights the link instead of the image.
-* **Fix**: [35](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/35) Fix issue of
+* **Fix**: [35](https://github.com/SimformSolutionsPvtLtd/chatview/issues/35) Fix issue of
   removing reaction which is reacted accidentally.
 
 ## [1.0.0+1]
@@ -203,24 +308,24 @@
 * **Breaking**: Add `chatUsers` in `ChatController`.
 * **Breaking**: Add `chatViewState` in `ChatView`.
 * **Breaking**: Change type of `reaction` to `Reaction` in `Message`.
-* [#8](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/8) Implement loading, error
+* [#8](https://github.com/SimformSolutionsPvtLtd/chatview/issues/8) Implement loading, error
   and no message UIs.
-* [#13](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/13) Implement group chat
+* [#13](https://github.com/SimformSolutionsPvtLtd/chatview/issues/13) Implement group chat
   and multiple reaction support.
-* [#22](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/22) Add `TextInputType`
+* [#22](https://github.com/SimformSolutionsPvtLtd/chatview/issues/22) Add `TextInputType`
   for `TextField`.
-* [#24](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/24)
+* [#24](https://github.com/SimformSolutionsPvtLtd/chatview/issues/24)
   Add `MessageType.custom` for custom messages.
 * **FEAT**: Auto scroll to replied message.
 
 ## [0.0.3]
 
-* [#7](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/7) Add
+* [#7](https://github.com/SimformSolutionsPvtLtd/chatview/issues/7) Add
   image-picker.
 
 ## [0.0.2]
 
-* Fixed [#10](https://github.com/SimformSolutionsPvtLtd/flutter_chatview/issues/10) - emoji and
+* Fixed [#10](https://github.com/SimformSolutionsPvtLtd/chatview/issues/10) - emoji and
   text.
 
 ## [0.0.1]

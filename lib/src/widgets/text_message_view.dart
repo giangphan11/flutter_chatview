@@ -19,11 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import 'package:chatview/chatview.dart';
+import 'package:chatview/src/widgets/custom_selection_area.dart';
 import 'package:flutter/material.dart';
 
-import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/models/models.dart';
-
+import '../extensions/extensions.dart';
 import '../utils/constants/constants.dart';
 import 'link_preview.dart';
 import 'reaction_widget.dart';
@@ -39,6 +39,7 @@ class TextMessageView extends StatelessWidget {
     this.messageReactionConfig,
     this.highlightMessage = false,
     this.highlightColor,
+    this.featureActiveConfig,
   }) : super(key: key);
 
   /// Represents current message is sent by current user.
@@ -65,10 +66,40 @@ class TextMessageView extends StatelessWidget {
   /// Allow user to set color of highlighted message.
   final Color? highlightColor;
 
+  /// Provides configuration of active features in chat.
+  final FeatureActiveConfig? featureActiveConfig;
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final textMessage = message.message;
+    final border = isMessageBySender
+        ? outgoingChatBubbleConfig?.border
+        : inComingChatBubbleConfig?.border;
+    final isSelectable = featureActiveConfig?.enableTextSelection ?? false;
+    final textSelectionConfig = isMessageBySender
+        ? outgoingChatBubbleConfig?.textSelectionConfig
+        : inComingChatBubbleConfig?.textSelectionConfig;
+    final extractedUrls = textMessage.extractedUrls;
+    final baseWidget = extractedUrls.isNotEmpty
+        ? LinkPreview(
+            linkPreviewConfig: _linkPreviewConfig,
+            textMessage: textMessage,
+            extractedUrls: extractedUrls,
+            normalTextStyle: _textStyle ??
+                textTheme.bodyMedium?.copyWith(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+          )
+        : Text(
+            textMessage,
+            style: _textStyle ??
+                textTheme.bodyMedium?.copyWith(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+          );
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -86,21 +117,15 @@ class TextMessageView extends StatelessWidget {
                   5, 0, 6, message.reaction.reactions.isNotEmpty ? 15 : 2),
           decoration: BoxDecoration(
             color: highlightMessage ? highlightColor : _color,
+            border: border,
             borderRadius: _borderRadius(textMessage),
           ),
-          child: textMessage.isUrl
-              ? LinkPreview(
-                  linkPreviewConfig: _linkPreviewConfig,
-                  url: textMessage,
+          child: isSelectable
+              ? CustomSelectionArea(
+                  config: textSelectionConfig,
+                  child: baseWidget,
                 )
-              : Text(
-                  textMessage,
-                  style: _textStyle ??
-                      textTheme.bodyMedium!.copyWith(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                ),
+              : baseWidget,
         ),
         if (message.reaction.reactions.isNotEmpty)
           ReactionWidget(

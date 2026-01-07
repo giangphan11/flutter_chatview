@@ -19,11 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'package:chatview/src/extensions/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:chatview/src/utils/constants/constants.dart';
 
-import '../values/typedefs.dart';
+import '../extensions/extensions.dart';
+import '../utils/constants/constants.dart';
 import 'emoji_picker_widget.dart';
 
 class EmojiRow extends StatelessWidget {
@@ -33,7 +32,7 @@ class EmojiRow extends StatelessWidget {
   }) : super(key: key);
 
   /// Provides callback when user taps on emoji in reaction pop-up.
-  final StringCallback onEmojiTap;
+  final ValueSetter<String> onEmojiTap;
 
   /// These are default emojis.
   final List<String> _emojiUnicodes = [

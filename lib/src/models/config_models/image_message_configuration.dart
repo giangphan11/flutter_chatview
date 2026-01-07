@@ -19,11 +19,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import 'package:chatview_utils/chatview_utils.dart';
 import 'package:flutter/material.dart';
 
-import '../../values/typedefs.dart';
-
 class ImageMessageConfiguration {
+  const ImageMessageConfiguration({
+    this.hideShareIcon = false,
+    this.shareIconConfig,
+    this.border,
+    this.onTap,
+    this.height,
+    this.width,
+    this.padding,
+    this.margin,
+    this.borderRadius,
+  });
+
   /// Provides configuration of share button while image message is appeared.
   final ShareIconConfiguration? shareIconConfig;
 
@@ -31,7 +42,7 @@ class ImageMessageConfiguration {
   final bool hideShareIcon;
 
   /// Provides callback when user taps on image message.
-  final MessageCallBack? onTap;
+  final ValueSetter<Message>? onTap;
 
   /// Used for giving height of image message.
   final double? height;
@@ -48,21 +59,22 @@ class ImageMessageConfiguration {
   /// Used for giving border radius of image message.
   final BorderRadius? borderRadius;
 
-  const ImageMessageConfiguration({
-    this.hideShareIcon = false,
-    this.shareIconConfig,
-    this.onTap,
-    this.height,
-    this.width,
-    this.padding,
-    this.margin,
-    this.borderRadius,
-  });
+  /// Used for giving border of image message.
+  final Border? border;
 }
 
 class ShareIconConfiguration {
+  ShareIconConfiguration({
+    this.onPressed,
+    this.icon,
+    this.defaultIconBackgroundColor,
+    this.padding,
+    this.margin,
+    this.defaultIconColor,
+  });
+
   /// Provides callback when user press on share button.
-  final StringCallback? onPressed; // Returns imageURL
+  final ValueSetter<String>? onPressed; // Returns imageURL
 
   /// Provides ability to add custom share icon.
   final Widget? icon;
@@ -78,13 +90,4 @@ class ShareIconConfiguration {
 
   /// Used to give share icon color.
   final Color? defaultIconColor;
-
-  ShareIconConfiguration({
-    this.onPressed,
-    this.icon,
-    this.defaultIconBackgroundColor,
-    this.padding,
-    this.margin,
-    this.defaultIconColor,
-  });
 }

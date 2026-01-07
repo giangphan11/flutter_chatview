@@ -19,37 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import 'package:chatview_utils/chatview_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../../values/typedefs.dart';
-import '../data_models/message.dart';
 
 class ReplyPopupConfiguration {
-  /// Used for giving background color to reply snack-bar.
-  final Color? backgroundColor;
-
-  /// Provides builder for creating reply pop-up widget.
-  final Widget Function(Message message, bool sentByCurrentUser)?
-      replyPopupBuilder;
-
-  /// Provides callback on unSend button.
-  final MessageCallBack? onUnsendTap;
-
-  /// Provides callback on onReply button.
-  final MessageCallBack? onReplyTap;
-
-  /// Provides callback on onReport button.
-  final MessageCallBack? onReportTap;
-
-  /// Provides callback on onMore button.
-  final MoreTapCallBack? onMoreTap;
-
-  /// Used to give text style of button text.
-  final TextStyle? buttonTextStyle;
-
-  /// Used to give color to top side border of reply snack bar.
-  final Color? topBorderColor;
-
   const ReplyPopupConfiguration({
     this.buttonTextStyle,
     this.topBorderColor,
@@ -60,4 +35,28 @@ class ReplyPopupConfiguration {
     this.backgroundColor,
     this.replyPopupBuilder,
   });
+
+  /// Used for giving background color to reply snack-bar.
+  final Color? backgroundColor;
+
+  /// Provides builder for creating reply pop-up widget.
+  final ReplyPopupBuilder? replyPopupBuilder;
+
+  /// Provides callback on unSend button.
+  final ValueSetter<Message>? onUnsendTap;
+
+  /// Provides callback on onReply button.
+  final ValueSetter<Message>? onReplyTap;
+
+  /// Provides callback on onReport button.
+  final ValueSetter<Message>? onReportTap;
+
+  /// Provides callback on onMore button.
+  final MoreTapCallBack? onMoreTap;
+
+  /// Used to give text style of button text.
+  final TextStyle? buttonTextStyle;
+
+  /// Used to give color to top side border of reply snack bar.
+  final Color? topBorderColor;
 }

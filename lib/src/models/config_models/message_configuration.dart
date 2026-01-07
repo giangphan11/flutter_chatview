@@ -19,12 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'package:chatview/src/models/models.dart';
-import 'package:flutter/material.dart';
 
 import '../../values/typedefs.dart';
+import '../models.dart';
 
 class MessageConfiguration {
+  const MessageConfiguration({
+    this.showReactionsOnCustomMessages = true,
+    this.imageMessageConfig,
+    this.messageReactionConfig,
+    this.emojiMessageConfig,
+    this.customMessageBuilder,
+    this.voiceMessageConfig,
+    this.customMessageReplyViewBuilder,
+  });
+
   /// Provides configuration of image message appearance.
   final ImageMessageConfiguration? imageMessageConfig;
 
@@ -35,7 +44,7 @@ class MessageConfiguration {
   final EmojiMessageConfiguration? emojiMessageConfig;
 
   /// Provides builder to create view for custom messages.
-  final Widget Function(Message)? customMessageBuilder;
+  final CustomMessageBuilder? customMessageBuilder;
 
   /// Configurations for voice message bubble
   final VoiceMessageConfiguration? voiceMessageConfig;
@@ -43,12 +52,8 @@ class MessageConfiguration {
   /// To customize reply view for custom message type
   final CustomMessageReplyViewBuilder? customMessageReplyViewBuilder;
 
-  const MessageConfiguration({
-    this.imageMessageConfig,
-    this.messageReactionConfig,
-    this.emojiMessageConfig,
-    this.customMessageBuilder,
-    this.voiceMessageConfig,
-    this.customMessageReplyViewBuilder,
-  });
+  /// To show or hide reactions on custom message types
+  ///
+  /// Default is `true`.
+  final bool showReactionsOnCustomMessages;
 }

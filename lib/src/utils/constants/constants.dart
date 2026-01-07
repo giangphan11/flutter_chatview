@@ -19,24 +19,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import 'package:chatview_utils/chatview_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../chatview.dart';
 import '../../widgets/chat_message_sending_to_sent_animation.dart';
 import '../timeago/timeago.dart' as timeago;
 
-const String emojiRegExpression =
-    r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])';
 const String imageUrlRegExpression =
     r'(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpeg)';
 const String dateFormat = "yyyy-MM-dd";
-const String jpg = ".jpg";
-const String png = ".png";
-const String jpeg = ".jpeg";
-const String couldNotLunch = "Could not lunch";
-const String profileImage =
-    "https://akm-img-a-in.tosshub.com/indiatoday/images/story/202103/photo-1511367461989-f85a21fda1_0_1200x768.jpeg?YVCV8xj2CmtZldc_tJAkykymqxE3fxNf&size=770:433";
+const String couldNotLaunch = "Could not launch";
 const String heart = "\u{2764}";
 const String faceWithTears = "\u{1F602}";
 const String disappointedFace = "\u{1F625}";
@@ -58,14 +51,27 @@ const double replyBorderRadius2 = 18;
 const double leftPadding3 = 12;
 const double textFieldBorderRadius = 27;
 const String defaultChatSeparatorDatePattern = 'MMM dd, yyyy';
+const double defaultChatTextFieldHeight = 10.0;
+const Color primaryColor = Color(0xffEE5366);
+const String defaultDateFormat = 'dd/MM/yyyy';
+const double userAvatarRadius = 24;
+const double loadMoreCircularProgressIndicatorSize = 36;
 
-applicationDateFormatter(DateTime inputTime) {
+const String httpScheme = 'http';
+const String httpsScheme = 'https';
+
+String applicationDateFormatter(DateTime inputTime) {
   if (DateTime.now().difference(inputTime).inDays <= 3) {
     return timeago.format(inputTime);
   } else {
     return DateFormat('dd MMM yyyy').format(inputTime);
   }
 }
+
+/// Regular expression to identify URLs in a text.
+const String urlRegex =
+    r'((https?://)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b'
+    r'([-a-zA-Z0-9@:%_\+.~#?&//=]*))';
 
 /// Default widget that appears on receipts at [MessageStatus.pending] when a message
 /// is not sent or at the pending state. A custom implementation can have different

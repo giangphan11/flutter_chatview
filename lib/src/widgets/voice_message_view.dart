@@ -1,10 +1,37 @@
+/*
+ * Copyright (c) 2022 Simform Solutions
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import 'dart:async';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
-import 'package:chatview/chatview.dart';
-import 'package:chatview/src/widgets/reaction_widget.dart';
+import 'package:chatview_utils/chatview_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../models/chat_bubble.dart';
+import '../models/config_models/message_reaction_configuration.dart';
+import '../models/config_models/voice_message_configuration.dart';
+import '../utils/audio_manager.dart';
+import 'reaction_widget.dart';
 
 class VoiceMessageView extends StatefulWidget {
   const VoiceMessageView({
@@ -27,7 +54,7 @@ class VoiceMessageView extends StatefulWidget {
 
   /// Provides message instance of chat.
   final Message message;
-  final Function(int)? onMaxDuration;
+  final ValueSetter<int>? onMaxDuration;
 
   /// Represents current message is sent by current user.
   final bool isMessageBySender;
@@ -56,15 +83,20 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
 
   PlayerWaveStyle playerWaveStyle = const PlayerWaveStyle(scaleFactor: 70);
 
+  PlayerWaveStyle get _waveStyle =>
+      (widget.isMessageBySender
+          ? widget.config?.outgoingPlayerWaveStyle
+          : widget.config?.inComingPlayerWaveStyle) ??
+      widget.config?.playerWaveStyle ??
+      playerWaveStyle;
+
   @override
   void initState() {
     super.initState();
     controller = PlayerController()
       ..preparePlayer(
         path: widget.message.message,
-        noOfSamples: widget.config?.playerWaveStyle
-                ?.getSamplesForWidth(widget.screenWidth * 0.5) ??
-            playerWaveStyle.getSamplesForWidth(widget.screenWidth * 0.5),
+        noOfSamples: _waveStyle.getSamplesForWidth(widget.screenWidth * 0.5),
       ).whenComplete(() => widget.onMaxDuration?.call(controller.maxDuration));
     playerStateSubscription = controller.onPlayerStateChanged
         .listen((state) => _playerState.value = state);
@@ -73,6 +105,9 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
   @override
   void dispose() {
     playerStateSubscription.cancel();
+
+    AudioManager.instance.clearController(controller);
+
     controller.dispose();
     _playerState.dispose();
     super.dispose();
@@ -90,6 +125,9 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
                 color: widget.isMessageBySender
                     ? widget.outgoingChatBubbleConfig?.color
                     : widget.inComingChatBubbleConfig?.color,
+                border: widget.isMessageBySender
+                    ? widget.outgoingChatBubbleConfig?.border
+                    : widget.inComingChatBubbleConfig?.border,
               ),
           padding: widget.config?.padding ??
               const EdgeInsets.symmetric(horizontal: 8),
@@ -107,12 +145,14 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
                     onPressed: _playOrPause,
                     icon:
                         state.isStopped || state.isPaused || state.isInitialised
-                            ? widget.config?.playIcon ??
+                            ? widget.config?.playIcon
+                                    ?.call(widget.isMessageBySender) ??
                                 const Icon(
                                   Icons.play_arrow,
                                   color: Colors.white,
                                 )
-                            : widget.config?.pauseIcon ??
+                            : widget.config?.pauseIcon
+                                    ?.call(widget.isMessageBySender) ??
                                 const Icon(
                                   Icons.stop,
                                   color: Colors.white,
@@ -125,8 +165,7 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
                 size: Size(widget.screenWidth * 0.50, 60),
                 playerController: controller,
                 waveformType: WaveformType.fitWidth,
-                playerWaveStyle:
-                    widget.config?.playerWaveStyle ?? playerWaveStyle,
+                playerWaveStyle: _waveStyle,
                 padding: widget.config?.waveformPadding ??
                     const EdgeInsets.only(right: 10),
                 margin: widget.config?.waveformMargin,
@@ -157,10 +196,9 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
     if (playerState.isInitialised ||
         playerState.isPaused ||
         playerState.isStopped) {
-      controller.startPlayer();
-      controller.setFinishMode(finishMode: FinishMode.pause);
+      AudioManager.instance.startPlaying(controller);
     } else {
-      controller.pausePlayer();
+      AudioManager.instance.pausePlaying(controller);
     }
   }
 }

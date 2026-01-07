@@ -20,45 +20,56 @@
  * SOFTWARE.
  */
 import 'package:any_link_preview/any_link_preview.dart';
-import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/models/config_models/link_preview_configuration.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../extensions/extensions.dart';
+import '../models/config_models/link_preview_configuration.dart';
 import '../utils/constants/constants.dart';
+import 'link_preview_text.dart';
 
 class LinkPreview extends StatelessWidget {
   const LinkPreview({
     Key? key,
-    required this.url,
+    required this.textMessage,
+    required this.extractedUrls,
     this.linkPreviewConfig,
+    this.normalTextStyle,
   }) : super(key: key);
 
+  /// Provides the whole text message to show.
+  final String textMessage;
+
   /// Provides url which is passed in message.
-  final String url;
+  final List<String> extractedUrls;
 
   /// Provides configuration of chat bubble appearance when link/URL is passed
   /// in message.
   final LinkPreviewConfiguration? linkPreviewConfig;
 
+  /// Provides normal text style for message text.
+  final TextStyle? normalTextStyle;
+
   @override
   Widget build(BuildContext context) {
+    final firstUrl = extractedUrls.first;
+    final isImageUrl = firstUrl.isImageUrl;
     return Padding(
       padding: linkPreviewConfig?.padding ??
           const EdgeInsets.symmetric(horizontal: 6, vertical: verticalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!url.isImageUrl &&
+          if (!isImageUrl &&
               !(context.chatBubbleConfig?.disableLinkPreview ?? false)) ...{
             Padding(
               padding: const EdgeInsets.symmetric(vertical: verticalPadding),
               child: AnyLinkPreview(
-                link: url,
+                link: firstUrl,
                 removeElevation: true,
                 errorBody: linkPreviewConfig?.errorBody,
                 proxyUrl: linkPreviewConfig?.proxyUrl,
-                onTap: _onLinkTap,
+                onTap: () => _onLinkTap(firstUrl),
                 placeholderWidget: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.25,
                   width: double.infinity,
@@ -77,13 +88,13 @@ class LinkPreview extends StatelessWidget {
                 titleStyle: linkPreviewConfig?.titleStyle,
               ),
             ),
-          } else ...{
+          } else if (isImageUrl) ...{
             Padding(
               padding: const EdgeInsets.symmetric(vertical: verticalPadding),
               child: InkWell(
-                onTap: _onLinkTap,
+                onTap: () => _onLinkTap(firstUrl),
                 child: Image.network(
-                  url,
+                  firstUrl,
                   height: 120,
                   width: double.infinity,
                   fit: BoxFit.fitWidth,
@@ -92,34 +103,30 @@ class LinkPreview extends StatelessWidget {
             ),
           },
           const SizedBox(height: verticalPadding),
-          InkWell(
-            onTap: _onLinkTap,
-            child: Text(
-              url,
-              style: linkPreviewConfig?.linkStyle ??
-                  const TextStyle(
-                    color: Colors.white,
-                    decoration: TextDecoration.underline,
-                  ),
-            ),
+          LinkPreviewText(
+            textMessage: textMessage,
+            extractedUrls: extractedUrls,
+            linkPreviewConfig: linkPreviewConfig,
+            onLinkTap: _onLinkTap,
+            normalTextStyle: normalTextStyle,
           ),
         ],
       ),
     );
   }
 
-  void _onLinkTap() {
-    if (linkPreviewConfig?.onUrlDetect != null) {
-      linkPreviewConfig?.onUrlDetect!(url);
+  void _onLinkTap(String url) {
+    if (linkPreviewConfig?.onUrlDetect case final onUrlDetect?) {
+      onUrlDetect(url);
     } else {
-      _launchURL();
+      _launchURL(url);
     }
   }
 
-  void _launchURL() async {
+  void _launchURL(String url) async {
     final parsedUrl = Uri.parse(url);
     await canLaunchUrl(parsedUrl)
         ? await launchUrl(parsedUrl)
-        : throw couldNotLunch;
+        : throw couldNotLaunch;
   }
 }

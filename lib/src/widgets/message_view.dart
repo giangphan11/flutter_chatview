@@ -19,15 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'package:chatview/chatview.dart';
-import 'package:chatview/src/widgets/chat_view_inherited_widget.dart';
+import 'package:chatview_utils/chatview_utils.dart';
 import 'package:flutter/material.dart';
 
-import 'package:chatview/src/extensions/extensions.dart';
+import '../extensions/extensions.dart';
+import '../models/chat_bubble.dart';
+import '../models/config_models/message_configuration.dart';
 import '../utils/constants/constants.dart';
+import '../values/typedefs.dart';
+import 'chat_view_inherited_widget.dart';
 import 'image_message_view.dart';
-import 'text_message_view.dart';
 import 'reaction_widget.dart';
+import 'text_message_view.dart';
 import 'voice_message_view.dart';
 
 class MessageView extends StatefulWidget {
@@ -72,7 +75,7 @@ class MessageView extends StatefulWidget {
   final Duration? longPressAnimationDuration;
 
   /// Allow user to set some action when user double tap on chat bubble.
-  final MessageCallBack? onDoubleTap;
+  final ValueSetter<Message>? onDoubleTap;
 
   /// Allow users to pass colour of chat bubble when user taps on replied message.
   final Color highlightColor;
@@ -92,7 +95,7 @@ class MessageView extends StatefulWidget {
 
   final ChatController? controller;
 
-  final Function(int)? onMaxDuration;
+  final ValueSetter<int>? onMaxDuration;
 
   @override
   State<MessageView> createState() => _MessageViewState();
@@ -117,15 +120,16 @@ class _MessageViewState extends State<MessageView>
         upperBound: 0.1,
         lowerBound: 0.0,
       );
-      if (widget.message.status != MessageStatus.read &&
-          !widget.isMessageBySender) {
-        widget.inComingChatBubbleConfig?.onMessageRead?.call(widget.message);
-      }
+
       _animationController?.addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           _animationController?.reverse();
         }
       });
+    }
+    if (widget.message.status != MessageStatus.read &&
+        !widget.isMessageBySender) {
+      widget.inComingChatBubbleConfig?.onMessageRead?.call(widget.message);
     }
   }
 
@@ -157,6 +161,8 @@ class _MessageViewState extends State<MessageView>
   Widget get _messageView {
     final message = widget.message.message;
     final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
+    final maxOutSideBubbleEmojis =
+        emojiMessageConfiguration?.maxOutSideBubbleEmojis;
     return Padding(
       padding: EdgeInsets.only(
         bottom: widget.message.reaction.reactions.isNotEmpty ? 6 : 0,
@@ -165,11 +171,13 @@ class _MessageViewState extends State<MessageView>
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           (() {
-                if (message.isAllEmoji) {
+                if (message.isAllEmoji &&
+                    (maxOutSideBubbleEmojis == null ||
+                        message.characters.length <= maxOutSideBubbleEmojis)) {
                   return Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      Padding(
+                      Container(
                         padding: emojiMessageConfiguration?.padding ??
                             EdgeInsets.fromLTRB(
                               leftPadding2,
@@ -179,6 +187,9 @@ class _MessageViewState extends State<MessageView>
                                   ? 14
                                   : 0,
                             ),
+                        constraints: BoxConstraints(
+                            maxWidth: widget.chatBubbleMaxWidth ??
+                                MediaQuery.sizeOf(context).width * 0.75),
                         child: Transform.scale(
                           scale: widget.shouldHighlight
                               ? widget.highlightScale
@@ -205,6 +216,8 @@ class _MessageViewState extends State<MessageView>
                     isMessageBySender: widget.isMessageBySender,
                     imageMessageConfig: messageConfig?.imageMessageConfig,
                     messageReactionConfig: messageConfig?.messageReactionConfig,
+                    inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
+                    outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
                     highlightImage: widget.shouldHighlight,
                     highlightScale: widget.highlightScale,
                   );
@@ -218,6 +231,7 @@ class _MessageViewState extends State<MessageView>
                     messageReactionConfig: messageConfig?.messageReactionConfig,
                     highlightColor: widget.highlightColor,
                     highlightMessage: widget.shouldHighlight,
+                    featureActiveConfig: chatViewIW?.featureActiveConfig,
                   );
                 } else if (widget.message.messageType.isVoice) {
                   return VoiceMessageView(
@@ -232,7 +246,24 @@ class _MessageViewState extends State<MessageView>
                   );
                 } else if (widget.message.messageType.isCustom &&
                     messageConfig?.customMessageBuilder != null) {
-                  return messageConfig?.customMessageBuilder!(widget.message);
+                  final customWidget =
+                      messageConfig!.customMessageBuilder!.call(widget.message);
+                  final showReactions =
+                      messageConfig?.showReactionsOnCustomMessages ?? true;
+                  return showReactions
+                      ? Stack(
+                          children: [
+                            customWidget,
+                            if (widget.message.reaction.reactions.isNotEmpty)
+                              ReactionWidget(
+                                reaction: widget.message.reaction,
+                                messageReactionConfig:
+                                    messageConfig?.messageReactionConfig,
+                                isMessageBySender: widget.isMessageBySender,
+                              ),
+                          ],
+                        )
+                      : customWidget;
                 }
               }()) ??
               const SizedBox(),

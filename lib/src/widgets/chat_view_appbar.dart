@@ -20,12 +20,11 @@
  * SOFTWARE.
  */
 import 'dart:io' if (kIsWeb) 'dart:html';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
+import 'package:chatview_utils/chatview_utils.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
-import '../../chatview.dart';
-import '../utils/constants/constants.dart';
 import 'profile_image_widget.dart';
 
 class ChatViewAppBar extends StatelessWidget {
@@ -44,15 +43,11 @@ class ChatViewAppBar extends StatelessWidget {
     this.padding,
     this.leading,
     this.showLeading = true,
-    this.defaultAvatarImage = profileImage,
+    this.defaultAvatarImage = Constants.profileImage,
     this.assetImageErrorBuilder,
     this.networkImageErrorBuilder,
     this.imageType = ImageType.network,
     this.networkImageProgressIndicatorBuilder,
-    this.circleRadius,
-    this.imageSize,
-    this.isUserVerified = false,
-    this.verifiedIconColor,
   }) : super(key: key);
 
   /// Allow user to change colour of appbar.
@@ -83,7 +78,7 @@ class ChatViewAppBar extends StatelessWidget {
   final double? elevation;
 
   /// Provides callback when user tap on back arrow.
-  final VoidCallBack? onBackPress;
+  final VoidCallback? onBackPress;
 
   /// Allow user to change padding in appbar.
   final EdgeInsets? padding;
@@ -109,13 +104,6 @@ class ChatViewAppBar extends StatelessWidget {
   /// Progress indicator builder for network image
   final NetworkImageProgressIndicatorBuilder?
       networkImageProgressIndicatorBuilder;
-
-  final double? circleRadius;
-
-  final double? imageSize;
-
-  final bool isUserVerified;
-  final Color? verifiedIconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -149,8 +137,6 @@ class ChatViewAppBar extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: ProfileImageWidget(
                         imageUrl: profilePicture,
-                        circleRadius: circleRadius,
-                        imageSize: imageSize,
                         defaultAvatarImage: defaultAvatarImage,
                         assetImageErrorBuilder: assetImageErrorBuilder,
                         networkImageErrorBuilder: networkImageErrorBuilder,
@@ -159,33 +145,28 @@ class ChatViewAppBar extends StatelessWidget {
                             networkImageProgressIndicatorBuilder,
                       ),
                     ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                        chatTitle,
-                        style: chatTitleTextStyle ??
-                            const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.25,
-                            ),
-                      ),
-                      if(isUserVerified)
-                      const SizedBox(width: 4),
-                      if(isUserVerified)
-                      Icon(Icons.verified, color: verifiedIconColor ?? Colors.blue, size: 16)
-                        ],
-                      ),
-                      if (userStatus != null)
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          userStatus!,
-                          style: userStatusTextStyle,
+                          chatTitle,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: chatTitleTextStyle ??
+                              const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.25,
+                              ),
                         ),
-                    ],
+                        if (userStatus != null)
+                          Text(
+                            userStatus!,
+                            style: userStatusTextStyle,
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               ),

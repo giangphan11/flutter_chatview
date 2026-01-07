@@ -21,14 +21,40 @@
  */
 
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:chatview_utils/chatview_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../values/enumeration.dart';
 import '../../values/typedefs.dart';
 
 class SendMessageConfiguration {
+  const SendMessageConfiguration({
+    this.voiceRecordingConfiguration = const VoiceRecordingConfiguration(),
+    this.shouldSendImageWithText = false,
+    this.allowRecordingVoice = true,
+    this.textFieldConfig,
+    this.textFieldBackgroundColor,
+    this.imagePickerIconsConfig,
+    this.imagePickerConfiguration,
+    this.defaultSendButtonColor,
+    this.sendButtonIcon,
+    this.replyDialogColor,
+    this.replyTitleColor,
+    this.replyMessageColor,
+    this.closeIconColor,
+    this.micIconColor,
+    this.cancelRecordConfiguration,
+    this.removeImageIcon,
+    this.removeImageIconColor,
+    this.removeImageIconSize,
+    this.selectedImageMargin,
+    this.selectedImageViewHeight,
+    this.imageBorderRadius,
+    this.selectedImageViewBuilder,
+    this.sendButtonStyle,
+  });
+
   /// Used to give background color to text field.
   final Color? textFieldBackgroundColor;
 
@@ -62,42 +88,51 @@ class SendMessageConfiguration {
   /// Enable/disable voice recording. Enabled by default.
   final bool allowRecordingVoice;
 
-  /// Enable/disable image picker from gallery. Enabled by default.
-  final bool enableGalleryImagePicker;
-
-  /// Enable/disable send image from camera. Enabled by default.
-  final bool enableCameraImagePicker;
-
   /// Color of mic icon when replying to some voice message.
   final Color? micIconColor;
 
   /// Styling configuration for recorder widget.
-  final VoiceRecordingConfiguration? voiceRecordingConfiguration;
+  final VoiceRecordingConfiguration voiceRecordingConfiguration;
 
   /// Configuration for cancel voice recording
   final CancelRecordConfiguration? cancelRecordConfiguration;
 
-  const SendMessageConfiguration({
-    this.textFieldConfig,
-    this.textFieldBackgroundColor,
-    this.imagePickerIconsConfig,
-    this.imagePickerConfiguration,
-    this.defaultSendButtonColor,
-    this.sendButtonIcon,
-    this.replyDialogColor,
-    this.replyTitleColor,
-    this.replyMessageColor,
-    this.closeIconColor,
-    this.allowRecordingVoice = true,
-    this.enableCameraImagePicker = true,
-    this.enableGalleryImagePicker = true,
-    this.voiceRecordingConfiguration,
-    this.micIconColor,
-    this.cancelRecordConfiguration,
-  });
+  /// If true, then image will be sent with text message.
+  final bool shouldSendImageWithText;
+
+  /// Icon to remove image from text field.
+  final Widget? removeImageIcon;
+
+  /// Color of remove image icon.
+  final Color? removeImageIconColor;
+
+  /// Size of remove image icon.
+  final double? removeImageIconSize;
+
+  /// Margin around selected image in text field.
+  final EdgeInsets? selectedImageMargin;
+
+  /// Height of selected image view in text field.
+  final double? selectedImageViewHeight;
+
+  /// Border radius of selected image in text field.
+  final double? imageBorderRadius;
+
+  /// Provides ability to build custom view for selected images in text field.
+  final SelectedImageViewBuilder? selectedImageViewBuilder;
+
+  /// Used to give style to send button.
+  final ButtonStyle? sendButtonStyle;
 }
 
 class ImagePickerIconsConfiguration {
+  const ImagePickerIconsConfiguration({
+    this.cameraIconColor,
+    this.galleryIconColor,
+    this.galleryImagePickerIcon,
+    this.cameraImagePickerIcon,
+  });
+
   /// Provides ability to pass custom gallery image picker icon.
   final Widget? galleryImagePickerIcon;
 
@@ -109,16 +144,32 @@ class ImagePickerIconsConfiguration {
 
   /// Used to give color to gallery icon.
   final Color? galleryIconColor;
-
-  const ImagePickerIconsConfiguration({
-    this.cameraIconColor,
-    this.galleryIconColor,
-    this.galleryImagePickerIcon,
-    this.cameraImagePickerIcon,
-  });
 }
 
 class TextFieldConfiguration {
+  const TextFieldConfiguration({
+    this.enabled = true,
+    this.hideLeadingActionsOnType = true,
+    this.compositionThresholdTime = const Duration(seconds: 1),
+    this.contentPadding,
+    this.maxLines,
+    this.borderRadius,
+    this.hintText,
+    this.hintStyle,
+    this.textStyle,
+    this.padding,
+    this.margin,
+    this.minLines,
+    this.textInputType,
+    this.onMessageTyping,
+    this.inputFormatters,
+    this.textCapitalization,
+    this.height,
+    this.hintMaxLines,
+    this.trailingActions,
+    this.leadingActions,
+  });
+
   /// Used to give max lines in text field.
   final int? maxLines;
 
@@ -156,7 +207,7 @@ class TextFieldConfiguration {
   final TextCapitalization? textCapitalization;
 
   /// Callback when a user starts/stops typing a message by [TypeWriterStatus]
-  final void Function(TypeWriterStatus status)? onMessageTyping;
+  final ValueSetter<TypeWriterStatus>? onMessageTyping;
 
   /// After typing stopped, the threshold time after which the composing
   /// status to be changed to [TypeWriterStatus.composed].
@@ -168,26 +219,37 @@ class TextFieldConfiguration {
   /// Default is [true].
   final bool enabled;
 
-  const TextFieldConfiguration({
-    this.contentPadding,
-    this.maxLines,
-    this.borderRadius,
-    this.hintText,
-    this.hintStyle,
-    this.textStyle,
-    this.padding,
-    this.margin,
-    this.minLines,
-    this.textInputType,
-    this.onMessageTyping,
-    this.compositionThresholdTime = const Duration(seconds: 1),
-    this.inputFormatters,
-    this.textCapitalization,
-    this.enabled = true,
-  });
+  /// Used to give height of text field.
+  final double? height;
+
+  /// List of widgets to be shown as trailing action widget in text field.
+  final TextFieldActionWidgetBuilder? trailingActions;
+
+  /// List of widgets to be shown as leading action widget in text field.
+  final TextFieldActionWidgetBuilder? leadingActions;
+
+  /// The maximum number of lines the [hintText] can occupy.
+  ///
+  /// Default is `1`.
+  final int? hintMaxLines;
+
+  /// Whether to hide leading action buttons when user starts typing.
+  /// - `true` to hide leading action buttons when user starts typing.
+  /// - `false` to always show leading action buttons.
+  ///
+  /// Default is `true`.
+  final bool hideLeadingActionsOnType;
 }
 
 class ImagePickerConfiguration {
+  const ImagePickerConfiguration({
+    this.maxWidth,
+    this.maxHeight,
+    this.imageQuality,
+    this.preferredCameraDevice,
+    this.onImagePicked,
+  });
+
   /// Used to give max width of image.
   final double? maxWidth;
 
@@ -202,21 +264,14 @@ class ImagePickerConfiguration {
 
   /// Callback when image is picked from camera or gallery,
   ///  we can perform our task on image like adding crop options and return new image path
-  final Future<String?> Function(String? path)? onImagePicked;
-
-  const ImagePickerConfiguration({
-    this.maxWidth,
-    this.maxHeight,
-    this.imageQuality,
-    this.preferredCameraDevice,
-    this.onImagePicked,
-  });
+  final ImagePickedCallback? onImagePicked;
 }
 
 class VoiceRecordingConfiguration {
   /// Styling configuration for the recorder widget as well as
   /// configuring the audio recording quality.
   const VoiceRecordingConfiguration({
+    this.recorderSettings = const RecorderSettings(),
     this.waveStyle,
     this.padding,
     this.margin,
@@ -225,11 +280,6 @@ class VoiceRecordingConfiguration {
     this.micIcon,
     this.recorderIconColor,
     this.stopIcon,
-    this.sampleRate,
-    this.bitRate,
-    this.androidEncoder,
-    this.iosEncoder,
-    this.androidOutputFormat,
   });
 
   /// Applies styles to waveform.
@@ -257,24 +307,10 @@ class VoiceRecordingConfiguration {
   /// Applies color to mic and stop icon.
   final Color? recorderIconColor;
 
-  /// The sample rate for audio is measured in samples per second.
-  /// A higher sample rate generates more samples per second,
-  /// resulting in better audio quality but also larger file sizes.
-  final int? sampleRate;
-
-  /// Bitrate is the amount of data per second that the codec uses to
-  /// encode the audio. A higher bitrate results in better quality
-  /// but also larger file sizes.
-  final int? bitRate;
-
-  /// Audio encoder to be used for recording for IOS.
-  final IosEncoder? iosEncoder;
-
-  /// Audio encoder to be used for recording for Android.
-  final AndroidEncoder? androidEncoder;
-
-  /// The audio output format to be used for recorded audio files on Android.
-  final AndroidOutputFormat? androidOutputFormat;
+  /// Configures audio recording settings for Android and iOS.
+  ///
+  /// Default is [RecorderSettings] with default values.
+  final RecorderSettings recorderSettings;
 }
 
 class CancelRecordConfiguration {
@@ -292,5 +328,5 @@ class CancelRecordConfiguration {
   final Color? iconColor;
 
   /// Provides callback on voice record cancel
-  final VoidCallBack? onCancel;
+  final VoidCallback? onCancel;
 }

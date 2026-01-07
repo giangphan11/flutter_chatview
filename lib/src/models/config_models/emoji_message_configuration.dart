@@ -22,14 +22,19 @@
 import 'package:flutter/material.dart';
 
 class EmojiMessageConfiguration {
+  const EmojiMessageConfiguration({
+    this.padding,
+    this.textStyle,
+    this.maxOutSideBubbleEmojis,
+  });
+
   /// Used for giving padding to emoji messages.
   final EdgeInsetsGeometry? padding;
 
   /// Used for giving text style to emoji messages.
   final TextStyle? textStyle;
 
-  const EmojiMessageConfiguration({
-    this.padding,
-    this.textStyle,
-  });
+  /// Maximum number of emojis to show outside the bubble
+  /// for emoji-only messages.
+  final int? maxOutSideBubbleEmojis;
 }

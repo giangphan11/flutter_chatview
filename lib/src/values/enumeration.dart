@@ -22,89 +22,10 @@
 
 // Different types Message of ChatView
 
+import 'package:chatview_utils/chatview_utils.dart';
 import 'package:flutter/material.dart';
 
-enum MessageType {
-  image,
-  text,
-
-  /// Only supported on android and ios
-  voice,
-  custom;
-
-  static MessageType? tryParse(String? value) {
-    final type = value?.trim().toLowerCase();
-    if (type?.isEmpty ?? true) return null;
-    if (type == image.name) {
-      return image;
-    } else if (type == text.name) {
-      return text;
-    } else if (type == voice.name) {
-      return voice;
-    } else if (type == custom.name) {
-      return custom;
-    }
-    return null;
-  }
-}
-
-/// Events, Wheter the user is still typing a message or has
-/// typed the message
-enum TypeWriterStatus { typing, typed }
-
-/// [MessageStatus] defines the current state of the message
-/// if you are sender sending a message then, the
-enum MessageStatus {
-  read,
-  delivered,
-  undelivered,
-  pending;
-
-  static MessageStatus? tryParse(String? value) {
-    final status = value?.trim().toLowerCase();
-    if (status?.isEmpty ?? true) return null;
-    if (status == read.name) {
-      return read;
-    } else if (status == delivered.name) {
-      return delivered;
-    } else if (status == undelivered.name) {
-      return undelivered;
-    } else if (status == pending.name) {
-      return pending;
-    }
-    return null;
-  }
-}
-
-/// Types of states
-enum ChatViewState { hasMessages, noData, loading, error }
-
 enum ShowReceiptsIn { all, lastMessage }
-
-enum ImageType {
-  asset,
-  network,
-  base64;
-
-  bool get isNetwork => this == ImageType.network;
-
-  bool get isAsset => this == ImageType.asset;
-
-  bool get isBase64 => this == ImageType.base64;
-
-  static ImageType? tryParse(String? value) {
-    final type = value?.trim().toLowerCase();
-    if (type?.isEmpty ?? true) return null;
-    if (type == asset.name) {
-      return asset;
-    } else if (type == network.name) {
-      return network;
-    } else if (type == base64.name) {
-      return base64;
-    }
-    return null;
-  }
-}
 
 enum SuggestionListAlignment {
   left(Alignment.bottomLeft),
@@ -151,4 +72,56 @@ enum SuggestionItemsType {
   bool get isScrollType => this == SuggestionItemsType.scrollable;
 
   bool get isMultilineType => this == SuggestionItemsType.multiline;
+}
+
+/// An enumeration of unread count styles.
+enum UnreadCountStyle {
+  /// Represents unread count as a dot.
+  dot,
+
+  /// Represents unread count as a number.
+  count,
+
+  /// Represents unread count as 99+ when the count exceeds 99.
+  /// Otherwise, it will show the actual count.
+  ninetyNinePlus,
+
+  /// Represents no unread count.
+  none;
+
+  /// Returns true if the unread count style is dot.
+  bool get isDot => this == dot;
+
+  /// Returns true if the unread count style is count.
+  bool get isCount => this == count;
+
+  /// Returns true if the unread count style is ninety-nine plus.
+  bool get isNinetyNinePlus => this == ninetyNinePlus;
+
+  /// Returns true if the unread count style is none.
+  bool get isNone => this == none;
+}
+
+enum ChatViewStateType {
+  chatView,
+  chatList;
+
+  bool get isChatView => this == ChatViewStateType.chatView;
+
+  bool get isChatList => this == ChatViewStateType.chatList;
+}
+
+enum UserActiveStatusAlignment {
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight;
+
+  bool get isTopLeft => this == topLeft;
+
+  bool get isTopRight => this == topRight;
+
+  bool get isBottomLeft => this == bottomLeft;
+
+  bool get isBottomRight => this == bottomRight;
 }

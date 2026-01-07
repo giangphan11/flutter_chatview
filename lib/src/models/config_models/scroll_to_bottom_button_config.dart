@@ -1,9 +1,32 @@
-import 'package:chatview/chatview.dart';
+/*
+ * Copyright (c) 2022 Simform Solutions
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import 'package:flutter/material.dart';
+
+import '../../values/enumeration.dart';
 
 /// Configuration for the "Scroll to Bottom" button.
 class ScrollToBottomButtonConfig {
-  ScrollToBottomButtonConfig({
+  const ScrollToBottomButtonConfig({
     this.backgroundColor,
     this.border,
     this.borderRadius,
@@ -13,6 +36,8 @@ class ScrollToBottomButtonConfig {
     this.padding,
     this.onClick,
     this.buttonDisplayOffset,
+    this.boxShadow,
+    this.insidePadding,
   });
 
   /// The background color of the button.
@@ -42,4 +67,10 @@ class ScrollToBottomButtonConfig {
   /// The scroll offset after which the button is displayed.
   /// The button appears when the scroll position is greater than or equal to this value.
   final double? buttonDisplayOffset;
+
+  /// The box shadow of the button.
+  final List<BoxShadow>? boxShadow;
+
+  /// The padding around the Icon inside the button.
+  final EdgeInsets? insidePadding;
 }

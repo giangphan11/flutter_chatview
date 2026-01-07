@@ -21,44 +21,38 @@
  */
 import 'dart:io' if (kIsWeb) 'dart:html';
 
-import 'package:chatview/chatview.dart';
-import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/utils/package_strings.dart';
-import 'package:chatview/src/widgets/chatui_textfield.dart';
-import 'package:chatview/src/widgets/reply_message_view.dart';
-import 'package:chatview/src/widgets/scroll_to_bottom_button.dart';
+import 'package:chatview_utils/chatview_utils.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
+import '../extensions/extensions.dart';
+import '../models/config_models/message_configuration.dart';
+import '../models/config_models/send_message_configuration.dart';
 import '../utils/constants/constants.dart';
-import 'chat_view_inherited_widget.dart';
+import '../values/typedefs.dart';
+import 'chatui_textfield.dart';
+import 'reply_message_view.dart';
+import 'scroll_to_bottom_button.dart';
+import 'selected_image_view_widget.dart';
 
 class SendMessageWidget extends StatefulWidget {
   const SendMessageWidget({
-    Key? key,
     required this.onSendTap,
-    this.sendMessageConfig,
+    required this.sendMessageConfig,
     this.sendMessageBuilder,
-    this.onReplyCallback,
-    this.onReplyCloseCallback,
     this.messageConfig,
     this.replyMessageBuilder,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// Provides call back when user tap on send button on text field.
   final StringMessageCallBack onSendTap;
 
   /// Provides configuration for text field appearance.
-  final SendMessageConfiguration? sendMessageConfig;
+  final SendMessageConfiguration sendMessageConfig;
 
   /// Allow user to set custom text field.
   final ReplyMessageWithReturnWidget? sendMessageBuilder;
-
-  /// Provides callback when user swipes chat bubble for reply.
-  final ReplyMessageCallBack? onReplyCallback;
-
-  /// Provides call when user tap on close button which is showed in reply pop-up.
-  final VoidCallBack? onReplyCloseCallback;
 
   /// Provides configuration of all types of messages.
   final MessageConfiguration? messageConfig;
@@ -72,19 +66,17 @@ class SendMessageWidget extends StatefulWidget {
 
 class SendMessageWidgetState extends State<SendMessageWidget> {
   final _textEditingController = TextEditingController();
-  final ValueNotifier<ReplyMessage> _replyMessage =
-      ValueNotifier(const ReplyMessage());
 
-  ReplyMessage get replyMessage => _replyMessage.value;
   final _focusNode = FocusNode();
 
-  ChatUser? get repliedUser => replyMessage.replyTo.isNotEmpty
-      ? chatViewIW?.chatController.getUserFromId(replyMessage.replyTo)
-      : null;
+  final GlobalKey<ReplyMessageViewState> _replyMessageTextFieldViewKey =
+      GlobalKey();
 
-  String get _replyTo => replyMessage.replyTo == currentUser?.id
-      ? PackageStrings.you
-      : repliedUser?.name ?? '';
+  final GlobalKey<SelectedImageViewWidgetState> _selectedImageViewWidgetKey =
+      GlobalKey();
+  ReplyMessage _replyMessage = const ReplyMessage();
+
+  ReplyMessage get replyMessage => _replyMessage;
 
   ChatUser? currentUser;
 
@@ -98,12 +90,24 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isCustomTextField = widget.sendMessageBuilder != null;
     final scrollToBottomButtonConfig =
         chatListConfig.scrollToBottomButtonConfig;
     return Align(
       alignment: Alignment.bottomCenter,
-      child: widget.sendMessageBuilder != null
-          ? widget.sendMessageBuilder!(replyMessage)
+      child: isCustomTextField
+          ? Builder(
+              // Assign the key only when using a custom text field to measure its height,
+              // to preventing overlap with the message list.
+              key: chatViewIW?.chatTextFieldViewKey,
+              builder: (context) {
+                WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => context.calculateAndUpdateTextFieldHeight(),
+                );
+                return widget.sendMessageBuilder?.call(_replyMessage) ??
+                    const SizedBox.shrink();
+              },
+            )
           : SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Stack(
@@ -154,117 +158,44 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              ValueListenableBuilder<ReplyMessage>(
-                                builder: (_, state, child) {
-                                  final replyTitle =
-                                      "${PackageStrings.replyTo} $_replyTo";
-                                  if (state.message.isNotEmpty) {
-                                    return widget.replyMessageBuilder
-                                            ?.call(context, state) ??
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: widget.sendMessageConfig
-                                                    ?.textFieldBackgroundColor ??
-                                                Colors.white,
-                                            borderRadius:
-                                                const BorderRadius.vertical(
-                                              top: Radius.circular(14),
-                                            ),
-                                          ),
-                                          margin: const EdgeInsets.only(
-                                            bottom: 17,
-                                            right: 0.4,
-                                            left: 0.4,
-                                          ),
-                                          padding: const EdgeInsets.fromLTRB(
-                                            leftPadding,
-                                            leftPadding,
-                                            leftPadding,
-                                            30,
-                                          ),
-                                          child: Container(
-                                            margin: const EdgeInsets.only(
-                                                bottom: 2),
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 4,
-                                              horizontal: 6,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: widget.sendMessageConfig
-                                                      ?.replyDialogColor ??
-                                                  Colors.grey.shade200,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        replyTitle,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          color: widget
-                                                                  .sendMessageConfig
-                                                                  ?.replyTitleColor ??
-                                                              Colors.deepPurple,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          letterSpacing: 0.25,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    IconButton(
-                                                      constraints:
-                                                          const BoxConstraints(),
-                                                      padding: EdgeInsets.zero,
-                                                      icon: Icon(
-                                                        Icons.close,
-                                                        color: widget
-                                                                .sendMessageConfig
-                                                                ?.closeIconColor ??
-                                                            Colors.black,
-                                                        size: 16,
-                                                      ),
-                                                      onPressed: onCloseTap,
-                                                    ),
-                                                  ],
-                                                ),
-                                                ReplyMessageView(
-                                                  message: state,
-                                                  customMessageReplyViewBuilder:
-                                                      widget.messageConfig
-                                                          ?.customMessageReplyViewBuilder,
-                                                  sendMessageConfig:
-                                                      widget.sendMessageConfig,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                  } else {
-                                    return const SizedBox.shrink();
-                                  }
-                                },
-                                valueListenable: _replyMessage,
+                              ReplyMessageView(
+                                key: _replyMessageTextFieldViewKey,
+                                sendMessageConfig: widget.sendMessageConfig,
+                                messageConfig: widget.messageConfig,
+                                builder: widget.replyMessageBuilder,
+                                onChange: (value) => _replyMessage = value,
                               ),
+                              if (widget
+                                  .sendMessageConfig.shouldSendImageWithText)
+                                SelectedImageViewWidget(
+                                  key: _selectedImageViewWidgetKey,
+                                  sendMessageConfig: widget.sendMessageConfig,
+                                ),
                               ChatUITextField(
                                 focusNode: _focusNode,
                                 textEditingController: _textEditingController,
                                 onPressed: _onPressed,
                                 sendMessageConfig: widget.sendMessageConfig,
                                 onRecordingComplete: _onRecordingComplete,
-                                onImageSelected: _onImageSelected,
-                              )
+                                onImageSelected: (images, messageId) {
+                                  if (widget.sendMessageConfig
+                                      .shouldSendImageWithText) {
+                                    if (images.isNotEmpty) {
+                                      _selectedImageViewWidgetKey.currentState
+                                          ?.selectedImages.value = [
+                                        ...?_selectedImageViewWidgetKey
+                                            .currentState?.selectedImages.value,
+                                        images
+                                      ];
+
+                                      FocusScope.of(context)
+                                          .requestFocus(_focusNode);
+                                    }
+                                  } else {
+                                    _onImageSelected(images, '');
+                                  }
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -279,23 +210,25 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
 
   void _onRecordingComplete(String? path) {
     if (path != null) {
-      widget.onSendTap.call(path, replyMessage, MessageType.voice);
-      _assignRepliedMessage();
+      widget.onSendTap.call(
+        path,
+        _replyMessage,
+        MessageType.voice,
+      );
+      onCloseTap();
     }
   }
 
   void _onImageSelected(String imagePath, String error) {
-    debugPrint('Call in Send Message Widget');
-    if (imagePath.isNotEmpty) {
-      widget.onSendTap.call(imagePath, replyMessage, MessageType.image);
-      _assignRepliedMessage();
-    }
+    if (imagePath.isEmpty) return;
+
+    widget.onSendTap.call(imagePath, _replyMessage, MessageType.image);
+    _assignRepliedMessage();
   }
 
   void _assignRepliedMessage() {
-    if (replyMessage.message.isNotEmpty) {
-      _replyMessage.value = const ReplyMessage();
-    }
+    if (_replyMessage.message.isEmpty) return;
+    _replyMessage = const ReplyMessage();
   }
 
   void _onPressed() {
@@ -303,32 +236,52 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
     _textEditingController.clear();
     if (messageText.isEmpty) return;
 
+    if (_selectedImageViewWidgetKey.currentState?.selectedImages.value
+        case final selectedImages?) {
+      for (final image in selectedImages) {
+        _onImageSelected(image, '');
+      }
+      _selectedImageViewWidgetKey.currentState?.selectedImages.value = [];
+    }
+
     widget.onSendTap.call(
       messageText.trim(),
-      replyMessage,
+      _replyMessage,
       MessageType.text,
     );
-    _assignRepliedMessage();
+    onCloseTap();
   }
 
   void assignReplyMessage(Message message) {
-    if (currentUser != null) {
-      _replyMessage.value = ReplyMessage(
-        message: message.message,
-        replyBy: currentUser!.id,
-        replyTo: message.sentBy,
-        messageType: message.messageType,
-        messageId: message.id,
-        voiceMessageDuration: message.voiceMessageDuration,
-      );
+    if (currentUser == null) {
+      return;
     }
     FocusScope.of(context).requestFocus(_focusNode);
-    if (widget.onReplyCallback != null) widget.onReplyCallback!(replyMessage);
+    _replyMessage = ReplyMessage(
+      message: message.message,
+      replyBy: currentUser!.id,
+      replyTo: message.sentBy,
+      messageType: message.messageType,
+      messageId: message.id,
+      voiceMessageDuration: message.voiceMessageDuration,
+    );
+
+    if (_replyMessageTextFieldViewKey.currentState == null) {
+      setState(() {});
+    } else {
+      _replyMessageTextFieldViewKey.currentState!.replyMessage.value =
+          _replyMessage;
+    }
   }
 
   void onCloseTap() {
-    _replyMessage.value = const ReplyMessage();
-    if (widget.onReplyCloseCallback != null) widget.onReplyCloseCallback!();
+    if (_replyMessageTextFieldViewKey.currentState == null) {
+      setState(() {
+        _replyMessage = const ReplyMessage();
+      });
+    } else {
+      _replyMessageTextFieldViewKey.currentState?.onClose();
+    }
   }
 
   double get _bottomPadding => (!kIsWeb && Platform.isIOS)
@@ -343,7 +296,6 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
-    _replyMessage.dispose();
     super.dispose();
   }
 }
