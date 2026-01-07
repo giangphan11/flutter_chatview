@@ -1,0 +1,2 @@
+/Users/giangphanba/Documents/GitHub/flutter_chatview/example/android/app/.cxx/Debug/4y85o364/x86/CMakeFiles/edit_cache.dir
+/Users/giangphanba/Documents/GitHub/flutter_chatview/example/android/app/.cxx/Debug/4y85o364/x86/CMakeFiles/rebuild_cache.dir

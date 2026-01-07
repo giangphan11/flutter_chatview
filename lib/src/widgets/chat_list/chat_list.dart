@@ -166,7 +166,8 @@ class _ChatListState extends State<ChatList> {
   Widget build(BuildContext context) {
     return CustomScrollView(
       controller: _scrollController,
-      keyboardDismissBehavior: widget.scrollViewKeyboardDismissBehavior,
+      keyboardDismissBehavior: widget.scrollViewKeyboardDismissBehavior ??
+          ScrollViewKeyboardDismissBehavior.onDrag,
       slivers: [
         if (widget.appbar case final appbar?) appbar,
         if (widget.searchConfig case final config?)

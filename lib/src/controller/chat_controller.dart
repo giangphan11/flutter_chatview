@@ -25,7 +25,7 @@ import 'package:chatview/src/widgets/suggestions/suggestion_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../models/models.dart';
+import '../../chatview.dart';
 
 class ChatController {
   /// Represents initial message list in chat which can be add by user.
